@@ -1,7 +1,7 @@
 package ua.training.model.dao.impl;
 
 import ua.training.model.dao.DaoFactory;
-import ua.training.model.dao.ItemDao;
+import ua.training.model.dao.FoodDao;
 import ua.training.model.dao.UserDao;
 
 import javax.sql.DataSource;
@@ -17,8 +17,8 @@ public class JDBCDaoFactory extends DaoFactory {
         return new JDBCUserDao(getConnection());
     }
     @Override
-    public ItemDao createItemDao() {
-        return new JDBCItemDao(getConnection());
+    public FoodDao createItemDao() {
+        return new JDBCFoodDao(getConnection());
     }
 
     private Connection getConnection(){

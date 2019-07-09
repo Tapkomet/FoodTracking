@@ -1,8 +1,8 @@
 package ua.training.model.dao.impl;
 
-import ua.training.model.dao.ItemDao;
-import ua.training.model.dao.mapper.ItemMapper;
-import ua.training.model.entity.Item;
+import ua.training.model.dao.FoodDao;
+import ua.training.model.dao.mapper.FoodMapper;
+import ua.training.model.entity.Food;
 import ua.training.model.entity.User;
 
 import java.sql.Connection;
@@ -14,43 +14,43 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class JDBCItemDao implements ItemDao {
+public class JDBCFoodDao implements FoodDao {
     private Connection connection;
 
 
-    public JDBCItemDao(Connection connection) {
+    public JDBCFoodDao(Connection connection) {
         this.connection = connection;
     }
 
     @Override
-    public void create(Item entity) {
+    public void create(Food entity) {
 
     }
 
     @Override
-    public Item findById(int id) {
+    public Food findById(int id) {
         return null;
     }
 
     @Override
-    public List<Item> findAll() {
-        Map<Integer, Item> items = new HashMap<>();
+    public List<Food> findAll() {
+        Map<Integer, Food> foods = new HashMap<>();
         Map<Integer, User> users = new HashMap<>();
 
         final String query = "" +
-                " select * from item";
+                " select * from food";
         try (Statement st = connection.createStatement()) {
             ResultSet rs = st.executeQuery(query);
 
-            ItemMapper itemMapper = new ItemMapper();
+            FoodMapper foodMapper = new FoodMapper();
 
             while (rs.next()) {
-                Item item = itemMapper
+                Food food = foodMapper
                         .extractFromResultSet(rs);
-                item = itemMapper
-                        .makeUnique(items, item);
+                food = foodMapper
+                        .makeUnique(foods, food);
             }
-            return new ArrayList<>(items.values());
+            return new ArrayList<>(foods.values());
         } catch (SQLException e) {
             e.printStackTrace();
             return null;
@@ -60,7 +60,7 @@ public class JDBCItemDao implements ItemDao {
 
 
     @Override
-    public void update(Item entity) {
+    public void update(Food entity) {
 
     }
 
@@ -79,7 +79,7 @@ public class JDBCItemDao implements ItemDao {
     }
 
     @Override
-    public void addItem(int itemId, String name, boolean available, long price) {
+    public void addFood(int foodId, String name, boolean available, long price) {
 
     }
 }

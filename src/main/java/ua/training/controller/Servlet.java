@@ -1,7 +1,7 @@
 package ua.training.controller;
 
 import ua.training.controller.commands.*;
-import ua.training.model.service.ItemService;
+import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
 
 import javax.servlet.ServletException;
@@ -14,14 +14,14 @@ import java.util.Map;
 
 public class Servlet extends HttpServlet {
 
-    private ItemService itemService = new ItemService();
+    private FoodService foodService = new FoodService();
     private Map<String, Command> commands = new HashMap<>();
 
     public void init(){
-        commands.put("admin/items",
-                new ItemListCommand(new ItemService()));
-        commands.put("admin/additem",
-                new AddItemCommand(new ItemService()));
+        commands.put("admin/foods",
+                new FoodListCommand(new FoodService()));
+        commands.put("admin/addfood",
+                new AddFoodCommand(new FoodService()));
         commands.put("user-login",
                 new LoginUserCommand(new UserService()));
         commands.put("user-register",

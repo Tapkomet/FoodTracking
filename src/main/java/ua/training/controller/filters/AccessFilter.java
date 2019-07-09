@@ -18,7 +18,7 @@ public class AccessFilter implements Filter {
         User user;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String path = request.getRequestURI();
-        if(path.contains("adminnn")) {
+        if(path.contains("admin")) {
             if ((user = (User) ((HttpServletRequest) servletRequest).getSession().getAttribute("user")) != null) {
                 filterChain.doFilter(servletRequest,servletResponse);
             }else{
