@@ -14,6 +14,10 @@ public class FoodMapper implements ObjectMapper<Food> {
         Food food = new Food();
         food.setId(rs.getInt("food_id"));
         food.setName(rs.getString("name"));
+        food.setCalories(rs.getInt("calories"));
+        food.setProtein(rs.getInt("protein"));
+        food.setFat(rs.getInt("fat"));
+        food.setCarbohydrates(rs.getInt("carbohydrates"));
         return food;
     }
 

@@ -5,10 +5,7 @@ import ua.training.model.dao.mapper.FoodMapper;
 import ua.training.model.entity.Food;
 import ua.training.model.entity.User;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,54 +20,101 @@ public class JDBCFoodDao implements FoodDao {
     }
 
     @Override
-    public void create(Food entity) {
+    public void create(Food food) throws SQLException {
+        int id = food.getId();
+        String name = food.getName();
+        int calories = food.getCalories();
+        int protein = food.getProtein();
+        int fat = food.getFat();
+        int carbohydrates = food.getCarbohydrates();
+        PreparedStatement stmt = connection.prepareStatement(
+                "insert into food (food_id, name, calories, protein, fat, carbohydrates)" +
+                        " values (?, ?, ?, ?, ?, ?)");
+        stmt.setInt(1, id);
+        stmt.setString(2, name);
+        stmt.setInt(3, calories);
+        stmt.setInt(4, protein);
+        stmt.setInt(5, fat);
+        stmt.setInt(6, carbohydrates);
+        stmt.executeUpdate();
 
+        stmt.close();
+        connection.close();
     }
 
     @Override
-    public Food findById(int id) {
-        return null;
+    public Food findById(int id) throws SQLException {
+        PreparedStatement stmt = connection.prepareStatement(
+                "select * from food where food_id = (?)");
+        stmt.setInt(1, id);
+        ResultSet rs = stmt.executeQuery();
+        FoodMapper foodMapper = new FoodMapper();
+
+        rs.next();
+        Food food = foodMapper.extractFromResultSet(rs);
+
+        stmt.close();
+        connection.close();
+        return food;
     }
 
     @Override
-    public List<Food> findAll() {
+    public List<Food> findAll() throws SQLException {
         Map<Integer, Food> foods = new HashMap<>();
-        Map<Integer, User> users = new HashMap<>();
 
         final String query = "" +
                 " select * from food";
-        try (Statement st = connection.createStatement()) {
-            ResultSet rs = st.executeQuery(query);
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(query);
 
-            FoodMapper foodMapper = new FoodMapper();
+        FoodMapper foodMapper = new FoodMapper();
 
-            while (rs.next()) {
-                Food food = foodMapper
-                        .extractFromResultSet(rs);
-                food = foodMapper
-                        .makeUnique(foods, food);
-            }
-            return new ArrayList<>(foods.values());
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
+        while (rs.next()) {
+            Food food = foodMapper
+                    .extractFromResultSet(rs);
+            foodMapper
+                    .makeUnique(foods, food);
         }
+        return new ArrayList<>(foods.values());
     }
 
 
-
     @Override
-    public void update(Food entity) {
+    public void update(Food food) throws SQLException {
+        int id = food.getId();
+        String name = food.getName();
+        int calories = food.getCalories();
+        int protein = food.getProtein();
+        int fat = food.getFat();
+        int carbohydrates = food.getCarbohydrates();
+        PreparedStatement stmt = connection.prepareStatement(
+                "update food set calories = ?, protein = ?, fat = ?, carbohydrates = ?" +
+                        " where id = ?");
+        stmt.setInt(5, id);
+        //stmt.setString(2, name);
+        stmt.setInt(1, calories);
+        stmt.setInt(2, protein);
+        stmt.setInt(3, fat);
+        stmt.setInt(4, carbohydrates);
+        stmt.executeUpdate();
 
+        stmt.close();
+        connection.close();
     }
 
     @Override
-    public void delete(int id) {
+    public void delete(int id) throws SQLException {
+        PreparedStatement stmt = connection.prepareStatement(
+                "delete from food where id = (?)");
+        stmt.setInt(1, id);
+        stmt.executeUpdate();
 
+        stmt.close();
+        connection.close();
     }
 
     @Override
-    public void close()  {
+    public void close() {
         try {
             connection.close();
         } catch (SQLException e) {
@@ -79,7 +123,33 @@ public class JDBCFoodDao implements FoodDao {
     }
 
     @Override
-    public void addFood(int foodId, String name, boolean available, long price) {
+    public int getCount() throws SQLException {
+        PreparedStatement preparedStatement = connection.prepareStatement
+                ("select count(*) as count from food");
+        ResultSet rs = preparedStatement.executeQuery();
+        if (rs.next()) {
+            return rs.getInt("count");
+        }
+        return 0;
+    }
 
+
+    @Override
+    public List<Food> findAllSorted(String sortBy) throws SQLException {
+        Map<Integer, Food> foods = new HashMap<>();
+
+        PreparedStatement stmt = connection.prepareStatement(" select * from food ORDER BY ?");
+        stmt.setString(1, sortBy);
+        ResultSet rs = stmt.executeQuery();
+
+        FoodMapper foodMapper = new FoodMapper();
+
+        while (rs.next()) {
+            Food food = foodMapper
+                    .extractFromResultSet(rs);
+            foodMapper
+                    .makeUnique(foods, food);
+        }
+        return new ArrayList<>(foods.values());
     }
 }
