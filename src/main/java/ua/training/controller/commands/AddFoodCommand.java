@@ -17,9 +17,20 @@ public class AddFoodCommand implements Command {
     public String execute(HttpServletRequest request) {
         int foodId = Integer.parseInt(request.getParameter("food_id"));
         String name = request.getParameter("name");
-        boolean available = Boolean.parseBoolean(request.getParameter("available"));
-        long price = Long.parseLong(request.getParameter("price"));
-        foodService.addFood(foodId, name, available, price);
+        int calories = Integer.parseInt(request.getParameter("calories"));
+        int protein = Integer.parseInt(request.getParameter("protein"));
+        int fat = Integer.parseInt(request.getParameter("fat"));
+        int carbohydrates = Integer.parseInt(request.getParameter("carbohydrates"));
+
+        Food food = new Food.Builder(foodId)
+                .foodName(name)
+                .calories(calories)
+                .fat(fat)
+                .protein(protein)
+                .carbohydrates(carbohydrates)
+                .build();
+
+        foodService.create(food);
         List<Food> foods = foodService.getAllFoods();
         request.setAttribute("foods" , foods);
         return "/WEB-INF/foodlist.jsp";

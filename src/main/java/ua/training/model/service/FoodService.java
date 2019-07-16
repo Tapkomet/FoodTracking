@@ -11,16 +11,20 @@ public class FoodService {
 
     DaoFactory daoFactory = DaoFactory.getInstance();
 
-    public List<Food> getAllFoods(){
+    public List<Food> getAllFoods() {
         try (FoodDao foodDao = daoFactory.createFoodDao()) {
             return foodDao.findAll();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
         }
     }
+    
 
-    public void addFood(int foodId, String name, boolean available, long price) {
+    public void create(Food food){
         try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            foodDao.addFood(foodId, name, available, foodId);
-        } catch (SQLException e) {
+            foodDao.create(food);
+        }catch (SQLException e) {
             e.printStackTrace();
         }
     }
