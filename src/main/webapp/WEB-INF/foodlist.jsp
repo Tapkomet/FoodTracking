@@ -6,16 +6,17 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Car List</title>
+    <title>Food List</title>
 </head>
     <body>
         <h2>
             List Foods <br/>
         </h2>
         <table>
-        <tr><th>Name</th><th>Group</th></tr>
+        <tr><th>id</th><th>name</th><th>calories</th><th>protein</th><th>fat</th><th>carbs</th></tr>
         <c:forEach var="i" foods="${foods}">
-            <tr><td>${i.foodId}<c:out value="${i.name}"/></td><td>${i.price}</td>
+            <tr><td>${i.id}</td><td>${i.name}</td><td>${i.calories}</td>
+            <td>${i.protein}</td><td>${i.fat}</td><td>${i.carbohydrates}</td>
         </c:forEach>
         </table>
         <br>
@@ -25,8 +26,10 @@
         <form action="${pageContext.request.contextPath}/api/client/addFood" method="post">
              FoodId <input type="number" name="food_id"/><br>
              Name <input type="text" name="name"/><br>
-             Available <input type="checkbox" name="available"/><br>
-             Price <input type="number" name="price"/><br>
+             Calories <input type="number" name="calories"/><br>
+             Protein <input type="number" name="protein"/><br>
+             Fat <input type="number" name="fat"/><br>
+             Carbohydrates <input type="number" name="carbohydrates"/><br>
              <input type="submit"/>
         </form>
 

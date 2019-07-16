@@ -16,12 +16,13 @@ public class JDBCDaoFactory extends DaoFactory {
     public UserDao createUserDao() {
         return new JDBCUserDao(getConnection());
     }
+
     @Override
-    public FoodDao createItemDao() {
+    public FoodDao createFoodDao() {
         return new JDBCFoodDao(getConnection());
     }
 
-    private Connection getConnection(){
+    private Connection getConnection() {
         try {
             return dataSource.getConnection();
         } catch (SQLException e) {

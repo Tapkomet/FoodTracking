@@ -12,7 +12,7 @@
     <body>
         <a href="${pageContext.request.contextPath}/login.jsp">Login</a>
         <br>
-        <a href="${pageContext.request.contextPath}/api/client/items">ItemList</a>
+        <a href="${pageContext.request.contextPath}/api/client/foods">All foods</a>
         <br>
         <a href="${pageContext.request.contextPath}/api/exception">Exception</a>
         <br>
