@@ -22,7 +22,7 @@
         <br>
         <%=request.getAttribute("foods")%>
         <br>
-        <form action="${pageContext.request.contextPath}/api/admin/addFood" method="post">
+        <form action="${pageContext.request.contextPath}/api/client/addFood" method="post">
              FoodId <input type="number" name="food_id"/><br>
              Name <input type="text" name="name"/><br>
              Available <input type="checkbox" name="available"/><br>

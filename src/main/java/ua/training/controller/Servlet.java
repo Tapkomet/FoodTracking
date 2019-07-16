@@ -18,9 +18,9 @@ public class Servlet extends HttpServlet {
     private Map<String, Command> commands = new HashMap<>();
 
     public void init(){
-        commands.put("admin/foods",
+        commands.put("client/foods",
                 new FoodListCommand(new FoodService()));
-        commands.put("admin/addFood",
+        commands.put("client/addFood",
                 new AddFoodCommand(new FoodService()));
         commands.put("user-login",
                 new LoginUserCommand(new UserService()));

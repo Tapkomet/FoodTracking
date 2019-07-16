@@ -14,7 +14,7 @@ public class User {
     private ROLE role;
 
     public enum ROLE {
-        CLIENT, ADMIN
+        CLIENT
     }
 
     public void setRoleFromString(String role){
