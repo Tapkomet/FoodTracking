@@ -10,20 +10,20 @@
 </head>
     <body>
         <h2>
-            List Items <br/>
+            List Foods <br/>
         </h2>
         <table>
         <tr><th>Name</th><th>Group</th></tr>
-        <c:forEach var="i" items="${items}">
-            <tr><td>${i.itemId}<c:out value="${i.name}"/></td><td>${i.price}</td>
+        <c:forEach var="i" foods="${foods}">
+            <tr><td>${i.foodId}<c:out value="${i.name}"/></td><td>${i.price}</td>
         </c:forEach>
         </table>
         <br>
         <br>
-        <%=request.getAttribute("items")%>
+        <%=request.getAttribute("foods")%>
         <br>
-        <form action="${pageContext.request.contextPath}/api/admin/addItem'/>" method="post">
-             ItemId <input type="number" name="item_id"/><br>
+        <form action="${pageContext.request.contextPath}/api/admin/addFood" method="post">
+             FoodId <input type="number" name="food_id"/><br>
              Name <input type="text" name="name"/><br>
              Available <input type="checkbox" name="available"/><br>
              Price <input type="number" name="price"/><br>
