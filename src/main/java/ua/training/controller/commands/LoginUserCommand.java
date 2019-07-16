@@ -5,7 +5,10 @@ import org.apache.logging.log4j.Logger;
 import ua.training.model.entity.User;
 import ua.training.model.service.UserService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Optional;
 
 
@@ -20,20 +23,20 @@ public class LoginUserCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if( email == null || email.equals("") || pass == null || pass.equals("")  ){
-            return "/login.jsp";
+            forward(request, response, "/login.jsp");
         }
         Optional<User> user = userService.login(email);
         if( user.isPresent() && user.get().getPassword().equals(pass)){
             request.getSession().setAttribute("user" , user.get());
-            logger.info("User "+ email+" logged successfully.");
-            return "/WEB-INF/foodlist.jsp";
+            logger.info("User " + email + " logged successfully.");
+            forward(request, response, "/WEB-INF/foodlist.jsp");
 
         }
         logger.info("Invalid attempt of login user:'"+ email+"'");
-        return "/login.jsp";
+        forward(request, response, "/login.jsp");
     }
 }

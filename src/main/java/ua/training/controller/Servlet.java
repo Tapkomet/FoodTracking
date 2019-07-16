@@ -36,9 +36,10 @@ public class Servlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getRequestURI();
         path = path.replaceAll(".*/api/" , "");
-        Command command = commands.getOrDefault(path , (r)->"/index.jsp)");
+        Command command = commands.containsKey(path) ? commands.get(path) : commands.get("/index.jsp");
         String page = command.execute(request);
-        request.getRequestDispatcher(page).forward(request,response);
+        command.execute(request, response);
+        //request.getRequestDispatcher(page).forward(request,response);
         //  response.getWriter().print("Hello from servlet");
     }
 

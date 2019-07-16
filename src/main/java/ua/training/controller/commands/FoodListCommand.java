@@ -3,7 +3,10 @@ package ua.training.controller.commands;
 import ua.training.model.entity.Food;
 import ua.training.model.service.FoodService;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.List;
 
 public class FoodListCommand implements Command {
@@ -14,9 +17,9 @@ public class FoodListCommand implements Command {
     }
 
     @Override
-    public String execute(HttpServletRequest request) {
+    public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         List<Food> foods = foodService.getAllFoods();
-        request.setAttribute("foods" , foods);
-        return "/WEB-INF/foodlist.jsp";
+        request.setAttribute("foods", foods);
+        forward(request, response, "/WEB-INF/foodlist.jsp");
     }
 }

@@ -14,7 +14,8 @@ public class AccessFilter implements Filter {
     }
 
     @Override
-    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+    public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
+            throws IOException, ServletException {
         User user;
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         String path = request.getRequestURI();
