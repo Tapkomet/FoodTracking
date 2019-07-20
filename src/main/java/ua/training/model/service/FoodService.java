@@ -19,12 +19,37 @@ public class FoodService {
             return null;
         }
     }
-    
 
-    public void create(Food food){
+    public Food getFoodById(int id) {
+        try (FoodDao foodDao = daoFactory.createFoodDao()) {
+            return foodDao.findById(id);
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public void create(Food food) {
         try (FoodDao foodDao = daoFactory.createFoodDao()) {
             foodDao.create(food);
-        }catch (SQLException e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void update(Food food) {
+        try (FoodDao foodDao = daoFactory.createFoodDao()) {
+            foodDao.update(food);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void delete(int code) {
+        try (FoodDao foodDao = daoFactory.createFoodDao()) {
+            foodDao.delete(code);
+        } catch (SQLException e) {
             e.printStackTrace();
         }
     }

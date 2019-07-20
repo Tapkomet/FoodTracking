@@ -1,6 +1,7 @@
 package ua.training.controller;
 
 import ua.training.controller.commands.*;
+import ua.training.controller.commands.food.*;
 import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
 
@@ -14,14 +15,19 @@ import java.util.Map;
 
 public class Servlet extends HttpServlet {
 
-    private FoodService foodService = new FoodService();
     private Map<String, Command> commands = new HashMap<>();
 
     public void init(){
+        commands.put("client/food",
+                new FoodCommand(new FoodService()));
         commands.put("client/foods",
                 new FoodListCommand(new FoodService()));
         commands.put("client/addFood",
                 new AddFoodCommand(new FoodService()));
+        commands.put("client/editFood",
+                new EditFoodCommand(new FoodService()));
+        commands.put("client/deleteFood",
+                new DeleteFoodCommand(new FoodService()));
         commands.put("user-login",
                 new LoginUserCommand(new UserService()));
         commands.put("user-register",
@@ -37,10 +43,7 @@ public class Servlet extends HttpServlet {
         String path = request.getRequestURI();
         path = path.replaceAll(".*/api/" , "");
         Command command = commands.containsKey(path) ? commands.get(path) : commands.get("/index.jsp");
-        String page = command.execute(request);
         command.execute(request, response);
-        //request.getRequestDispatcher(page).forward(request,response);
-        //  response.getWriter().print("Hello from servlet");
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)

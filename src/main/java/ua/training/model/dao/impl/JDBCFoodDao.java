@@ -91,7 +91,7 @@ public class JDBCFoodDao implements FoodDao {
                 "update food set calories = ?, protein = ?, fat = ?, carbohydrates = ?" +
                         " where id = ?");
         stmt.setInt(5, id);
-        //stmt.setString(2, name);
+        stmt.setString(2, name);
         stmt.setInt(1, calories);
         stmt.setInt(2, protein);
         stmt.setInt(3, fat);

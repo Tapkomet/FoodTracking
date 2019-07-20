@@ -13,10 +13,16 @@
             List Foods <br/>
         </h2>
         <table>
-        <tr><th>id</th><th>name</th><th>calories</th><th>protein</th><th>fat</th><th>carbs</th></tr>
+        <tr><th>id</th><th>Name</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Carbs</th><th></th></tr>
         <c:forEach var="i" foods="${foods}">
-            <tr><td>${i.id}</td><td>${i.name}</td><td>${i.calories}</td>
+            <tr><td><a href="food?food_id=<c:out value='${i.id}' />"> <c:out value="${i.id}"/></a>
+            <td>${i.name}</td><td>${i.calories}</td>
             <td>${i.protein}</td><td>${i.fat}</td><td>${i.carbohydrates}</td>
+            <td>
+                <form action="${pageContext.request.contextPath}/api/client/deleteFood?food_id=${i.id}" method="post">
+                <input type="submit" value="Delete"/>
+                </form>
+            </td>
         </c:forEach>
         </table>
         <br>
