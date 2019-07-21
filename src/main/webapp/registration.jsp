@@ -2,6 +2,9 @@
 
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+
 
 
 
@@ -13,10 +16,7 @@
     <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
     <body>
-       <div class="container">
-            <div class="row">
-                <div class="col-lg-12">
-                    <div class="centre">
+       <div class="container col-lg-12 centre">
         <h2>
              Registration page! <br/>
 
@@ -46,10 +46,8 @@
         </form>
 
         <p class="centre" style="margin-top: 30px">Already have an account? <a href="/login.jsp ">Sign In</a>.</p>
-            </div>
-         </div>
-
-        </div>
+        <br/>
+        <a href="${pageContext.request.contextPath}/index.jsp">index</a>
        </div>
     </body>
 </html>

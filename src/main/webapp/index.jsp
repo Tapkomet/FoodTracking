@@ -7,19 +7,35 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Doctor App</title>
+    <title>Food Tracking</title>
+    <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
+    <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
     <body>
-        <a href="${pageContext.request.contextPath}/login.jsp">Login</a>
+        <div class="container col-lg-12 centre">
+        <h2>
+            Landing page <br/>
+        </h2>
+
+        <br/>
+    <ul class="options">
+        <li><a href="${pageContext.request.contextPath}/login.jsp">Login</a></li>
         <br>
-        <a href="${pageContext.request.contextPath}/api/client/foods">All foods</a>
+        <li><a href="${pageContext.request.contextPath}/api/logout">Logout</a></li>
         <br>
-        <a href="${pageContext.request.contextPath}/api/exception">Exception</a>
+        <li><a href="${pageContext.request.contextPath}/api/exception">Exception</a></li>
         <br>
-        <a href="${pageContext.request.contextPath}/registration.jsp">Registration</a>
+        <li><a href="${pageContext.request.contextPath}/registration.jsp">Registration</a></li>
         <br>
-         <c:if test="${not empty index_message}">
+        <li><a href="${pageContext.request.contextPath}/api/client">Client View</a></li>
+        <br>
+        <li><a href="${pageContext.request.contextPath}/api/admin">Admin View</a></li>
+    </ul>
+
+
+        <c:if test="${not empty index_message}">
             <p>${index_message}</p>
-         </c:if>
+        </c:if>
+        </div>
     </body>
 </html>
