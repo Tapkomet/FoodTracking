@@ -2,6 +2,7 @@ package ua.training.controller.commands.food;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.training.controller.util.Path;
 import ua.training.model.entity.Food;
 import ua.training.model.service.FoodService;
 
@@ -44,7 +45,7 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
                 logger.debug("Database error when requesting foods");
                 request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
             }
-            forward(request, response, "/WEB-INF/foodlist.jsp");
+            forward(request, response, Path.FOOD_LIST);
         }
     }
 
@@ -56,6 +57,6 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
             logger.debug("Database error when requesting foods");
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
         }
-        forward(request, response, "/WEB-INF/foodlist.jsp");
+        forward(request, response, Path.FOOD_LIST);
     }
 }

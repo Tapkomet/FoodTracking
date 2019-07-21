@@ -3,6 +3,7 @@ package ua.training.controller.commands.food;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import ua.training.controller.commands.Command;
+import ua.training.controller.util.Path;
 import ua.training.model.entity.Food;
 import ua.training.model.service.FoodService;
 
@@ -32,6 +33,6 @@ public class FoodCommand implements Command {
             logger.debug("Database error when requesting food {}"+id);
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
         }
-        forward(request, response, "/WEB-INF/food.jsp");
+        forward(request, response, Path.FOOD);
     }
 }

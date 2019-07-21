@@ -2,6 +2,7 @@ package ua.training.controller.commands;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.training.controller.util.Path;
 import ua.training.model.service.UserService;
 
 import javax.servlet.ServletException;
@@ -25,10 +26,10 @@ public class RegisterUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if (email == null || email.equals("") || pass == null || pass.equals("")) {
-            forward(request, response, "/index.jsp");
+            forward(request, response, Path.INDEX);
         }
         userService.register(surname, email, pass);
         logger.info("Registration attempt");
-        forward(request, response, "/index.jsp");
+        forward(request, response, Path.INDEX);
     }
 }

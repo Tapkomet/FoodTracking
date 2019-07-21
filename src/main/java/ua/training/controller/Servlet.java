@@ -2,6 +2,7 @@ package ua.training.controller;
 
 import ua.training.controller.commands.*;
 import ua.training.controller.commands.food.*;
+import ua.training.controller.util.Path;
 import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
 
@@ -10,7 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -43,7 +43,7 @@ public class Servlet extends HttpServlet {
         request.setCharacterEncoding("UTF-8");
         String path = request.getRequestURI();
         path = path.replaceAll(".*/api/" , "");
-        Command command = commands.containsKey(path) ? commands.get(path) : commands.get("/index.jsp");
+        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(Path.INDEX);
         command.execute(request, response);
     }
 

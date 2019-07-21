@@ -2,6 +2,7 @@ package ua.training.controller.commands;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import ua.training.controller.util.Path;
 import ua.training.model.entity.User;
 import ua.training.model.service.UserService;
 
@@ -27,16 +28,16 @@ public class LoginUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if( email == null || email.equals("") || pass == null || pass.equals("")  ){
-            forward(request, response, "/login.jsp");
+            forward(request, response, Path.LOGIN);
         }
         Optional<User> user = userService.login(email);
         if( user.isPresent() && user.get().getPassword().equals(pass)){
             request.getSession().setAttribute("user" , user.get());
             logger.info("User " + email + " logged successfully.");
-            forward(request, response, "/WEB-INF/foodlist.jsp");
+            forward(request, response, Path.FOOD_LIST);
 
         }
         logger.info("Invalid attempt of login user:'"+ email+"'");
-        forward(request, response, "/login.jsp");
+        forward(request, response, Path.LOGIN);
     }
 }

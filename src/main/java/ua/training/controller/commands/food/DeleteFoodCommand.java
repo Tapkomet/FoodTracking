@@ -1,5 +1,6 @@
 package ua.training.controller.commands.food;
 
+import ua.training.controller.util.Path;
 import ua.training.model.service.FoodService;
 
 import javax.servlet.ServletException;
@@ -27,6 +28,6 @@ public class DeleteFoodCommand implements ua.training.controller.commands.Comman
             listCommand.getAllFoods(request, response);
             return;
         }
-        redirect(request, response, "/api/client/foods");
+        redirect(request, response, Path.CLIENT_FOODS);
     }
 }

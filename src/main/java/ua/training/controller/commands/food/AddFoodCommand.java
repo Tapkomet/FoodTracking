@@ -1,6 +1,7 @@
 package ua.training.controller.commands.food;
 
 import ua.training.controller.commands.Command;
+import ua.training.controller.util.Path;
 import ua.training.controller.util.Regex;
 import ua.training.model.entity.Food;
 import ua.training.model.service.FoodService;
@@ -74,7 +75,7 @@ public class AddFoodCommand implements Command {
             showError(request, response);
             return;
         }
-        redirect(request, response, "/api/client/foods");
+        redirect(request, response, Path.CLIENT_FOODS);
     }
 
     private boolean checkNumber(HttpServletRequest request, HttpServletResponse response, String paramName,
