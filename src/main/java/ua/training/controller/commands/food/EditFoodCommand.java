@@ -79,6 +79,6 @@ public class EditFoodCommand implements Command {
     private void showError(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         FoodListCommand listCommand = new FoodListCommand(foodService);
-        listCommand.execute(request, response);
+        listCommand.getAllFoods(request, response);
     }
 }

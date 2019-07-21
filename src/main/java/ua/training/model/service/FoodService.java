@@ -36,4 +36,33 @@ public class FoodService {
         FoodDao foodDao = daoFactory.createFoodDao();
         foodDao.delete(code);
     }
+
+    public List<Food> getFoodsSortedBy(String sortBy) throws SQLException {
+        try (FoodDao foodDao = daoFactory.createFoodDao()) {
+            List<Food> foods = foodDao.findAll();
+            switch (sortBy) {
+                case "food_id":
+                    foods.sort(Food.FoodIdComparator);
+                    break;
+                case "name":
+                    foods.sort(Food.FoodNameComparator);
+                    break;
+                case "calories":
+                    foods.sort(Food.FoodCaloriesComparator);
+                    break;
+                case "protein":
+                    foods.sort(Food.FoodProteinComparator);
+                    break;
+                case "fat":
+                    foods.sort(Food.FoodFatComparator);
+                    break;
+                case "carbohydrates":
+                    foods.sort(Food.FoodCarbohydratesComparator);
+                    break;
+                default:
+                    break;
+            }
+            return foods;
+        }
+    }
 }

@@ -12,6 +12,9 @@
         <h2>
             List Foods <br/>
         </h2>
+        <c:if test="${not empty sql_error_message}">
+            <p class="error">${sql_error_message}</p>
+        </c:if>
         <table>
         <tr><th>id</th><th>Name</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Carbs</th><th></th></tr>
         <c:forEach var="i" foods="${foods}">
@@ -26,16 +29,44 @@
         </c:forEach>
         </table>
         <br>
+          <form action="${pageContext.request.contextPath}/api/client/foods" method="get">
+          Sort by: <br>
+          <input type="radio" name="toSort" value="food_id" checked>Code<br>
+          <input type="radio" name="toSort" value="name">Name<br>
+          <input type="radio" name="toSort" value="calories">calories<br>
+          <input type="radio" name="toSort" value="protein">protein<br>
+          <input type="radio" name="toSort" value="fat">fat<br>
+          <input type="radio" name="toSort" value="carbohydrates">carbohydrates<br>
+          <input type="submit" value="Sort"/>
+          </form>
         <br>
         <%=request.getAttribute("foods")%>
         <br>
         <form action="${pageContext.request.contextPath}/api/client/addFood" method="post">
              FoodId <input type="number" name="food_id"/><br>
+             <c:if test="${not empty id_error_message}">
+                <p class="error">${id_error_message}</p>
+             </c:if>
              Name <input type="text" name="name"/><br>
+             <c:if test="${not empty name_error_message}">
+                <p class="error">${name_error_message}</p>
+             </c:if>
              Calories <input type="number" name="calories"/><br>
+             <c:if test="${not empty calories_error_message}">
+                <p class="error">${calories_error_message}</p>
+             </c:if>
              Protein <input type="number" name="protein"/><br>
+             <c:if test="${not empty protein_error_message}">
+                <p class="error">${protein_error_message}</p>
+             </c:if>
              Fat <input type="number" name="fat"/><br>
+             <c:if test="${not empty fat__error_message}">
+                <p class="error">${fat__error_message}</p>
+             </c:if>
              Carbohydrates <input type="number" name="carbohydrates"/><br>
+             <c:if test="${not empty carbohydrates_error_message}">
+                <p class="error">${carbohydrates_error_message}</p>
+             </c:if>
              <input type="submit"/>
         </form>
 

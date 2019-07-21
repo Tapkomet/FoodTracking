@@ -18,18 +18,37 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
     public FoodListCommand(FoodService foodService) {
         this.foodService = foodService;
     }
+
     private static final Logger logger = LogManager.getLogger(FoodListCommand.class);
 
     /**
      * Lists all foods available
-     * @param request Servlet request
+     *
+     * @param request  Servlet request
      * @param response Servlet response
      * @throws ServletException if forwarding or redirecting fails
-     * @throws IOException if forwarding or redirecting
+     * @throws IOException      if forwarding or redirecting
      * @author Roman Kobzar
      */
+
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String sortBy = request.getParameter("toSort");
+        if (sortBy == null) {
+            getAllFoods(request, response);
+        } else {
+            try {
+                List<Food> foods = foodService.getFoodsSortedBy(sortBy);
+                request.setAttribute("foods", foods);
+            } catch (SQLException e) {
+                logger.debug("Database error when requesting foods");
+                request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
+            }
+            forward(request, response, "/WEB-INF/foodlist.jsp");
+        }
+    }
+
+    void getAllFoods(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             List<Food> foods = foodService.getAllFoods();
             request.setAttribute("foods", foods);
