@@ -6,6 +6,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class DeleteFoodCommand implements ua.training.controller.commands.Command {
     private FoodService foodService;
@@ -16,9 +17,16 @@ public class DeleteFoodCommand implements ua.training.controller.commands.Comman
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sid = request.getParameter("food_id");
-        int id = Integer.parseInt(sid);
-        foodService.delete(id);
-        response.sendRedirect(request.getContextPath() + "/api/client/foods");
+        String sid = request.getParameter("id");
+        int code = Integer.parseInt(sid);
+        try {
+            foodService.delete(code);
+        } catch (SQLException e) {
+            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
+            FoodListCommand listCommand = new FoodListCommand(foodService);
+            listCommand.execute(request, response);
+            return;
+        }
+        redirect(request, response, "/api/manager/foods");
     }
 }

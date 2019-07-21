@@ -11,46 +11,29 @@ public class FoodService {
 
     DaoFactory daoFactory = DaoFactory.getInstance();
 
-    public List<Food> getAllFoods() {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            return foodDao.findAll();
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public List<Food> getAllFoods() throws SQLException {
+        FoodDao foodDao = daoFactory.createFoodDao();
+        return foodDao.findAll();
     }
 
-    public Food getFoodById(int id) {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            return foodDao.findById(id);
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public Food getFoodById(int id) throws SQLException {
+        FoodDao foodDao = daoFactory.createFoodDao();
+        return foodDao.findById(id);
     }
 
 
-    public void create(Food food) {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            foodDao.create(food);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void create(Food food) throws SQLException {
+        FoodDao foodDao = daoFactory.createFoodDao();
+        foodDao.create(food);
     }
 
-    public void update(Food food) {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            foodDao.update(food);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void update(Food food) throws SQLException {
+        FoodDao foodDao = daoFactory.createFoodDao();
+        foodDao.update(food);
     }
 
-    public void delete(int code) {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            foodDao.delete(code);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+    public void delete(int code) throws SQLException {
+        FoodDao foodDao = daoFactory.createFoodDao();
+        foodDao.delete(code);
     }
 }

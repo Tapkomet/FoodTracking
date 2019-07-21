@@ -18,5 +18,8 @@
         <br>
         <a href="${pageContext.request.contextPath}/registration.jsp">Registration</a>
         <br>
+         <c:if test="${not empty index_message}">
+            <p>${index_message}</p>
+         </c:if>
     </body>
 </html>
