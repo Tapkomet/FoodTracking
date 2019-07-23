@@ -152,4 +152,33 @@ public class JDBCFoodDao implements FoodDao {
         }
         return new ArrayList<>(foods.values());
     }
+
+    @Override
+    public List<Food> findNumberSorted(String sortBy, int integer, int offset) throws SQLException {
+        PreparedStatement stmt = null;
+        switch (sortBy) {
+            case "name":
+                stmt = connection.prepareStatement
+                        (" select * from food order by name limit ? offset ?");
+                break;
+            default:
+                stmt = connection.prepareStatement
+                        (" select * from food order by " + sortBy + "+0 limit ? offset ?");
+                break;
+        }
+        stmt.setInt(1, integer);
+        stmt.setInt(2, offset);
+
+        ResultSet rs = stmt.executeQuery();
+
+        List<Food> foods = new ArrayList<>();
+        FoodMapper foodMapper = new FoodMapper();
+
+        while (rs.next()) {
+            Food food = foodMapper
+                    .extractFromResultSet(rs);
+            foods.add(food);
+        }
+        return foods;
+    }
 }

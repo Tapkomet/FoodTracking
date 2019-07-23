@@ -30,15 +30,37 @@
             </td>
         </c:forEach>
         </table>
+
+        <form action="${pageContext.request.contextPath}/api/client/foods" method="post">
+            <c:if test="${page > 1}">
+                <button type="submit" class="btn btn-default" name="nextPage" value='previous'>
+                    Previous
+                </button>
+            </c:if>
+            <c:if test="${page < lastPage}">
+                <button type="submit" class="btn btn-default" name="nextPage" value='next'>
+                    Next
+                </button>
+            </c:if>
+        <input type="hidden" name = "page" value="${page}">
+        <input type="hidden" name = "tosort" value="${tosort}">
+        </form>
+
         <br>
           <form action="${pageContext.request.contextPath}/api/client/foods" method="get">
           Sort by: <br>
-          <input type="radio" name="tosort" value="food_id" checked>Code<br>
-          <input type="radio" name="tosort" value="name">Name<br>
-          <input type="radio" name="tosort" value="calories">calories<br>
-          <input type="radio" name="tosort" value="protein">protein<br>
-          <input type="radio" name="tosort" value="fat">fat<br>
-          <input type="radio" name="tosort" value="carbohydrates">carbohydrates<br>
+          <input type="radio" name="tosort" value="food_id"
+          <c:if test="${tosort eq 'food_id'}">checked</c:if>>Id<br>
+          <input type="radio" name="tosort" value="name"
+          <c:if test="${tosort eq 'name'}">checked</c:if>>Name<br>
+          <input type="radio" name="tosort" value="calories"
+          <c:if test="${tosort eq 'calories'}">checked</c:if>>Calories<br>
+          <input type="radio" name="tosort" value="protein"
+          <c:if test="${tosort eq 'protein'}">checked</c:if>>Protein<br>
+          <input type="radio" name="tosort" value="fat"
+          <c:if test="${tosort eq 'fat'}">checked</c:if>>Fat<br>
+          <input type="radio" name="tosort" value="carbohydrates"
+          <c:if test="${tosort eq 'carbohydrates'}">checked</c:if>>Carbohydrates<br>
           <input type="submit" value="Sort"/>
           </form>
         <br>

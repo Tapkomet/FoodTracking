@@ -25,7 +25,7 @@ public class DeleteFoodCommand implements ua.training.controller.commands.Comman
         } catch (SQLException e) {
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
             FoodListCommand listCommand = new FoodListCommand(foodService);
-            listCommand.getAllFoods(request, response);
+            listCommand.execute(request, response);
             return;
         }
         redirect(request, response, Path.CLIENT_FOODS);
