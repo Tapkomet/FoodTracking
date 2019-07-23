@@ -34,7 +34,7 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sortBy = request.getParameter("toSort");
+        String sortBy = request.getParameter("tosort");
         if (sortBy == null) {
             getAllFoods(request, response);
         } else {

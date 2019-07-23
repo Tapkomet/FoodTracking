@@ -33,12 +33,12 @@
         <br>
           <form action="${pageContext.request.contextPath}/api/client/foods" method="get">
           Sort by: <br>
-          <input type="radio" name="toSort" value="food_id" checked>Code<br>
-          <input type="radio" name="toSort" value="name">Name<br>
-          <input type="radio" name="toSort" value="calories">calories<br>
-          <input type="radio" name="toSort" value="protein">protein<br>
-          <input type="radio" name="toSort" value="fat">fat<br>
-          <input type="radio" name="toSort" value="carbohydrates">carbohydrates<br>
+          <input type="radio" name="tosort" value="food_id" checked>Code<br>
+          <input type="radio" name="tosort" value="name">Name<br>
+          <input type="radio" name="tosort" value="calories">calories<br>
+          <input type="radio" name="tosort" value="protein">protein<br>
+          <input type="radio" name="tosort" value="fat">fat<br>
+          <input type="radio" name="tosort" value="carbohydrates">carbohydrates<br>
           <input type="submit" value="Sort"/>
           </form>
         <br>
