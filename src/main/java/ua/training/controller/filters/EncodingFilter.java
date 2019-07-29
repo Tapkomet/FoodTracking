@@ -12,6 +12,7 @@ public class EncodingFilter implements Filter {
     /**
      * Implementation of encoding filter. Ensures
      * UTF-8 encoding for multi-language support.
+     *
      * @author Roman Kobzar
      * @see javax.servlet.Filter
      */
@@ -20,7 +21,7 @@ public class EncodingFilter implements Filter {
         servletResponse.setContentType("text/html");
         servletResponse.setCharacterEncoding("UTF-8");
         servletRequest.setCharacterEncoding("UTF-8");
-        filterChain.doFilter(servletRequest,servletResponse);
+        filterChain.doFilter(servletRequest, servletResponse);
     }
 
     @Override

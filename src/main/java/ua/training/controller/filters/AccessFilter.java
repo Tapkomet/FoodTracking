@@ -23,11 +23,12 @@ public class AccessFilter implements Filter {
         String loginURI = request.getContextPath() + Path.LOGIN;
         String path = request.getRequestURI();
         String roleRequired = "";
+        /*
         if (path.contains("manager")) roleRequired = "manager";
         else if (path.contains("admin")) roleRequired = "admin";
         else if (path.contains("cashier")) roleRequired = "cashier";
         switch (roleRequired) {
-            /*case "manager":
+            case "manager":
                 if (user!=null&&(user.getRole() == User.ROLE.PRODUCT_MANAGER || user.getRole() == User.ROLE.SENIOR_CASHIER)) {
                     filterChain.doFilter(servletRequest, servletResponse);
 
@@ -48,11 +49,11 @@ public class AccessFilter implements Filter {
                 } else {
                     response.sendRedirect(loginURI);
                 }
-                break;*/
-            default:
-                filterChain.doFilter(servletRequest, servletResponse);
-        }
+                break;
+            default:*/
+        filterChain.doFilter(servletRequest, servletResponse);
     }
+
 
     @Override
     public void destroy() {
