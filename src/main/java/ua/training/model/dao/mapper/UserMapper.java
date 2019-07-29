@@ -19,7 +19,7 @@ public class UserMapper implements ObjectMapper<User> {
     }
 
     public User makeUnique(Map<Integer, User> cache,
-                              User user) {
+                           User user) {
         cache.putIfAbsent(user.getId(), user);
         return cache.get(user.getId());
     }

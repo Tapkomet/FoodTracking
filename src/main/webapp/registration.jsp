@@ -46,8 +46,7 @@
         </form>
 
         <p class="centre" style="margin-top: 30px">Already have an account? <a href="/login.jsp ">Sign In</a>.</p>
-        <br/>
-        <a href="${pageContext.request.contextPath}/index.jsp">index</a>
+
        </div>
     </body>
 </html>

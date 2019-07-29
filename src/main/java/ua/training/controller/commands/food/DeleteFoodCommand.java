@@ -18,10 +18,10 @@ public class DeleteFoodCommand implements ua.training.controller.commands.Comman
 
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sid = request.getParameter("id");
-        int code = Integer.parseInt(sid);
+        String sid = request.getParameter("food_id");
+        int foodId = Integer.parseInt(sid);
         try {
-            foodService.delete(code);
+            foodService.delete(foodId);
         } catch (SQLException e) {
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
             FoodListCommand listCommand = new FoodListCommand(foodService);

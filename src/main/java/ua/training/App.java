@@ -1,6 +1,6 @@
 package ua.training;
 
-import java.sql.SQLException;
+import java.sql.*;
 
 public class App {
     public static void main(String[] args) throws SQLException {
@@ -12,7 +12,7 @@ public class App {
                         getConnection(  "jdbc:"+
                                         "mysql:"+
                                         "//localhost:3306/"+
-                                        "myitemdb",
+                                        "myproductdb",
                                 "root" ,
                                 "root");
 

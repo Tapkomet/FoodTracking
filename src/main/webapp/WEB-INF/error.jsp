@@ -3,8 +3,6 @@
 <%@ page language="java" isErrorPage="true"  contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <%@ page import="java.util.*, java.text.*" %>
 
-
-
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -15,8 +13,8 @@
     <body>
         <h2>
            Error Page<br/>
-            <i>Error <%= exception %></i>
         </h2>
+
         <c:if test="${not empty code}">
             <p class="error">Error code: ${code}</p>
         </c:if>
@@ -24,6 +22,7 @@
         <c:if test="${not empty message}">
             <p class="message">Error: ${message}</p>
         </c:if>
+
 
        <br>
 

@@ -89,7 +89,7 @@ public class JDBCFoodDao implements FoodDao {
         int carbohydrates = food.getCarbohydrates();
         PreparedStatement stmt = connection.prepareStatement(
                 "update food set calories = ?, protein = ?, fat = ?, carbohydrates = ?" +
-                        " where id = ?");
+                        " where food_id = ?");
         stmt.setInt(5, id);
         stmt.setString(2, name);
         stmt.setInt(1, calories);
@@ -105,7 +105,7 @@ public class JDBCFoodDao implements FoodDao {
     @Override
     public void delete(int id) throws SQLException {
         PreparedStatement stmt = connection.prepareStatement(
-                "delete from food where id = (?)");
+                "delete from food where food_id = (?)");
         stmt.setInt(1, id);
         stmt.executeUpdate();
 

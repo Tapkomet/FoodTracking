@@ -34,7 +34,7 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String sortBy = request.getParameter("tosort");
+        /*String sortBy = request.getParameter("tosort");
         if (sortBy == null || sortBy.equals("")) {
             sortBy = "food_id";
         }
@@ -90,6 +90,16 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
         }
 
+
+        forward(request, response, Path.FOOD_LIST);
+        */
+        try {
+            List<Food> foods = foodService.getAllFoods();
+            request.setAttribute("foods", foods);
+        } catch (SQLException e) {
+            logger.debug("Database error when requesting foods");
+            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
+        }
         forward(request, response, Path.FOOD_LIST);
     }
 

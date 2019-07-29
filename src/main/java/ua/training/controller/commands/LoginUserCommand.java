@@ -13,7 +13,6 @@ import java.io.IOException;
 import java.util.Optional;
 
 
-
 public class LoginUserCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(LoginUserCommand.class);

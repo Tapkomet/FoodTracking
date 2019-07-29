@@ -56,6 +56,11 @@ public class JDBCUserDao implements UserDao {
     }
 
     @Override
+    public int getCount() throws SQLException {
+        return 0;
+    }
+
+    @Override
     public Optional<User> findByEmail(String email) {
         Optional<User> result = Optional.empty();
         try(PreparedStatement ps = connection.prepareCall("SELECT * FROM user WHERE email = ?")){

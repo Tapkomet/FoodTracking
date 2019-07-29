@@ -7,7 +7,7 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <title>Food Tracking</title>
+    <title>Cash Register</title>
     <link rel="stylesheet" href="/css/bootstrap.min.css" type="text/css">
     <link rel="stylesheet" href="/css/style.css" type="text/css">
 </head>
@@ -27,9 +27,12 @@
         <br>
         <li><a href="${pageContext.request.contextPath}/registration.jsp">Registration</a></li>
         <br>
+
+        <li><a href="${pageContext.request.contextPath}/api/admin">Admin View</a></li>
+        <br>
         <li><a href="${pageContext.request.contextPath}/api/client">Client View</a></li>
         <br>
-        <li><a href="${pageContext.request.contextPath}/api/admin">Admin View</a></li>
+        <li><a href="${pageContext.request.contextPath}/api/client/foods">Food View</a></li>
     </ul>
 
 

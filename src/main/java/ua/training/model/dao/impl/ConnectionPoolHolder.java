@@ -12,7 +12,7 @@ public class ConnectionPoolHolder {
             synchronized (ConnectionPoolHolder.class) {
                 if (dataSource == null) {
                     BasicDataSource ds = new BasicDataSource();
-                    ds.setUrl("jdbc:mysql://localhost:3306/foodtracking");
+                    ds.setUrl("jdbc:mysql://localhost:3306/food_tracking");
                     ds.setUsername("root");
                     ds.setPassword("root");
                     ds.setMinIdle(5);

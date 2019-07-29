@@ -19,7 +19,7 @@
         </c:if>
         <table>
         <tr><th>id</th><th>Name</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Carbs</th><th></th></tr>
-        <c:forEach var="i" foods="${foods}">
+        <c:forEach var="i" items="${foods}">
             <tr><td><a href="food?food_id=<c:out value='${i.id}' />"> <c:out value="${i.id}"/></a>
             <td>${i.name}</td><td>${i.calories}</td>
             <td>${i.protein}</td><td>${i.fat}</td><td>${i.carbohydrates}</td>

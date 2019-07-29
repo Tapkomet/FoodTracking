@@ -12,8 +12,9 @@ public class FoodService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
     public List<Food> getAllFoods() throws SQLException {
-        FoodDao foodDao = daoFactory.createFoodDao();
-        return foodDao.findAll();
+        try (FoodDao foodDao = daoFactory.createFoodDao()) {
+            return foodDao.findAll();
+        }
     }
 
 
