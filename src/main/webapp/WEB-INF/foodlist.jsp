@@ -64,8 +64,6 @@
           <input type="submit" value="Sort"/>
           </form>
         <br>
-        <%=request.getAttribute("foods")%>
-        <br>
         <form action="${pageContext.request.contextPath}/api/client/addFood" method="post">
              FoodId <input type="number" name="food_id"/><br>
              <c:if test="${not empty id_error_message}">
