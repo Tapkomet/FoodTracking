@@ -24,15 +24,15 @@ public class Servlet extends HttpServlet {
         super.init(servletConfig);
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
-        commands.put("client/food",
+        commands.put("client/food/getOne",
                 new FoodCommand(new FoodService()));
-        commands.put("client/foods",
+        commands.put("client/food/getAll",
                 new FoodListCommand(new FoodService()));
-        commands.put("client/addFood",
+        commands.put("client/food/add",
                 new AddFoodCommand(new FoodService()));
-        commands.put("client/editFood",
+        commands.put("client/food/edit",
                 new EditFoodCommand(new FoodService()));
-        commands.put("client/deleteFood",
+        commands.put("client/food/delete",
                 new DeleteFoodCommand(new FoodService()));
         commands.put("user-login",
                 new LoginUserCommand(new UserService()));

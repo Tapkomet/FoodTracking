@@ -4,11 +4,11 @@ public interface Path {
     String ADMIN = "/api/admin";
     String ADMIN_USERS = "/api/admin/users";
     String ADMIN_EDIT_USER = "/api/admin/users/edit";
-    String CLIENT_FOODS = "/api/client/foods";
-    String CLIENT_FOOD = "/api/client/food";
-    String CLIENT_ADD_FOOD = "/api/client/addFood";
-    String CLIENT_EDIT_FOOD = "/api/client/editFood";
-    String CLIENT_DELETE_FOOD = "/api/client/deleteFood";
+    String CLIENT_FOODS = "/api/client/food/getAll";
+    String CLIENT_FOOD = "/api/client/food/getOne";
+    String CLIENT_ADD_FOOD = "/api/client/food/add";
+    String CLIENT_EDIT_FOOD = "/api/client/food/edit";
+    String CLIENT_DELETE_FOOD = "/api/client/food/delete";
     String USER_LOGIN = "/api/user-login";
     String USER_LOGOUT = "/api/logout";
     String USER_REGISTER = "/api/user-register";

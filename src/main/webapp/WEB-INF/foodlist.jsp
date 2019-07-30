@@ -20,18 +20,18 @@
         <table>
         <tr><th>id</th><th>Name</th><th>Calories</th><th>Protein</th><th>Fat</th><th>Carbs</th><th></th></tr>
         <c:forEach var="i" items="${foods}">
-            <tr><td><a href="food?food_id=<c:out value='${i.id}' />"> <c:out value="${i.id}"/></a>
+            <tr><td><a href="getOne?food_id=<c:out value='${i.id}' />"> <c:out value="${i.id}"/></a>
             <td>${i.name}</td><td>${i.calories}</td>
             <td>${i.protein}</td><td>${i.fat}</td><td>${i.carbohydrates}</td>
             <td>
-                <form action="${pageContext.request.contextPath}/api/client/deleteFood?food_id=${i.id}" method="post">
+                <form action="${pageContext.request.contextPath}/api/client/food/delete?food_id=${i.id}" method="post">
                 <input type="submit" value="Delete"/>
                 </form>
             </td>
         </c:forEach>
         </table>
 
-        <form action="${pageContext.request.contextPath}/api/client/foods" method="post">
+        <form action="${pageContext.request.contextPath}/api/client/food/getAll" method="post">
             <c:if test="${page > 1}">
                 <button type="submit" class="btn btn-default" name="nextPage" value='previous'>
                     Previous
@@ -47,7 +47,7 @@
         </form>
 
         <br>
-          <form action="${pageContext.request.contextPath}/api/client/foods" method="get">
+          <form action="${pageContext.request.contextPath}/api/client/food/getAll" method="get">
           Sort by: <br>
           <input type="radio" name="tosort" value="food_id"
           <c:if test="${tosort eq 'food_id'}">checked</c:if>>Id<br>
@@ -64,7 +64,7 @@
           <input type="submit" value="Sort"/>
           </form>
         <br>
-        <form action="${pageContext.request.contextPath}/api/client/addFood" method="post">
+        <form action="${pageContext.request.contextPath}/api/client/food/add" method="post">
              FoodId <input type="number" name="food_id"/><br>
              <c:if test="${not empty id_error_message}">
                 <p class="error">${id_error_message}</p>

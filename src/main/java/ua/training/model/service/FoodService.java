@@ -47,9 +47,9 @@ public class FoodService {
 
 
     public List<Food> getFoodsSorted(String sortBy, int rows_on_page, Integer offset) throws SQLException {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            List<Food> foods = foodDao.findNumberSorted(sortBy, rows_on_page, offset);
-            return foods;
-        }
+        FoodDao foodDao = daoFactory.createFoodDao();
+        List<Food> foods = foodDao.findNumberSorted(sortBy, rows_on_page, offset);
+        return foods;
     }
 }
+

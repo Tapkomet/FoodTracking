@@ -141,7 +141,6 @@ public class JDBCFoodDao implements FoodDao {
         PreparedStatement stmt = connection.prepareStatement(" select * from food ORDER BY ?");
         stmt.setString(1, sortBy);
         ResultSet rs = stmt.executeQuery();
-
         FoodMapper foodMapper = new FoodMapper();
 
         while (rs.next()) {

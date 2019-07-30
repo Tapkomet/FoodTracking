@@ -72,7 +72,7 @@ public class FoodListCommand implements ua.training.controller.commands.Command 
 
         List<Food> foods;
         try {
-            if (lastPage > page) {
+            if (lastPage > page || lastPage == 0) {
                 Integer offset = (page - 1) * ROWS_ON_PAGE;
                 foods = foodService.getFoodsSorted(sortBy, ROWS_ON_PAGE, offset);
             } else {

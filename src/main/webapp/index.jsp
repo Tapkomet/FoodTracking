@@ -32,7 +32,7 @@
         <br>
         <li><a href="${pageContext.request.contextPath}/api/client">Client View</a></li>
         <br>
-        <li><a href="${pageContext.request.contextPath}/api/client/foods">Food View</a></li>
+        <li><a href="${pageContext.request.contextPath}/api/client/food/getAll">Food View</a></li>
     </ul>
 
 
