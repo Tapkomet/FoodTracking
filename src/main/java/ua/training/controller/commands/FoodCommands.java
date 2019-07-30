@@ -35,6 +35,17 @@ public class FoodCommands implements CommandCRUD, Command {
     @Override
     public void add(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        addOrEdit(request, response, "add");
+    }
+
+    @Override
+    public void edit(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        addOrEdit(request, response, "edit");
+    }
+
+    private void addOrEdit(HttpServletRequest request, HttpServletResponse response, String operation)
+            throws ServletException, IOException {
         String foodIdStr = request.getParameter("food_id");
         String caloriesStr = request.getParameter("calories");
         String proteinStr = request.getParameter("protein");
@@ -70,7 +81,11 @@ public class FoodCommands implements CommandCRUD, Command {
                 .build();
 
         try {
-            foodService.create(food);
+            if (operation.equals("add")) {
+                foodService.create(food);
+            } else {
+                foodService.update(food);
+            }
         } catch (SQLException e) {
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
             getAll(request, response);
@@ -155,53 +170,6 @@ public class FoodCommands implements CommandCRUD, Command {
 
 
         forward(request, response, Path.FOOD_LIST);
-    }
-
-    @Override
-    public void edit(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        String foodIdStr = request.getParameter("food_id");
-        String caloriesStr = request.getParameter("calories");
-        String proteinStr = request.getParameter("protein");
-        String fatStr = request.getParameter("fat");
-        String carbohydratesStr = request.getParameter("carbohydrates");
-
-        if (numberFormatIsWrong(request, response, "id", foodIdStr)
-                || numberFormatIsWrong(request, response, "calories", caloriesStr)
-                || numberFormatIsWrong(request, response, "protein", proteinStr)
-                || numberFormatIsWrong(request, response, "fat", fatStr)
-                || numberFormatIsWrong(request, response, "carbohydrates", carbohydratesStr))
-            return;
-
-        int foodId = Integer.parseInt(foodIdStr);
-        int calories = Integer.parseInt(caloriesStr);
-        int protein = Integer.parseInt(proteinStr);
-        int fat = Integer.parseInt(fatStr);
-        int carbohydrates = Integer.parseInt(carbohydratesStr);
-
-        String name = request.getParameter("name");
-        if (name == null || name.equals("")) {
-            request.setAttribute("name_error_message", "Put in the name");
-            getAll(request, response);
-            return;
-        }
-
-        Food food = new Food.Builder(foodId)
-                .foodName(name)
-                .calories(calories)
-                .fat(fat)
-                .protein(protein)
-                .carbohydrates(carbohydrates)
-                .build();
-
-        try {
-            foodService.update(food);
-        } catch (SQLException e) {
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
-            getAll(request, response);
-            return;
-        }
-        redirect(request, response, Path.CLIENT_FOODS);
     }
 
     @Override
