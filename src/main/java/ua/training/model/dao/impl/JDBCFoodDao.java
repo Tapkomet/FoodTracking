@@ -2,6 +2,7 @@ package ua.training.model.dao.impl;
 
 import ua.training.model.dao.FoodDao;
 import ua.training.model.dao.mapper.FoodMapper;
+import ua.training.model.dao.mapper.ObjectMapper;
 import ua.training.model.entity.Food;
 import ua.training.model.entity.User;
 
@@ -50,7 +51,7 @@ public class JDBCFoodDao implements FoodDao {
                 "select * from food where food_id = (?)");
         stmt.setInt(1, id);
         ResultSet rs = stmt.executeQuery();
-        FoodMapper foodMapper = new FoodMapper();
+        ObjectMapper<Food> foodMapper = new FoodMapper();
 
         rs.next();
         Food food = foodMapper.extractFromResultSet(rs);
@@ -69,7 +70,7 @@ public class JDBCFoodDao implements FoodDao {
         Statement st = connection.createStatement();
         ResultSet rs = st.executeQuery(query);
 
-        FoodMapper foodMapper = new FoodMapper();
+        ObjectMapper<Food> foodMapper = new FoodMapper();
 
         while (rs.next()) {
             Food food = foodMapper
@@ -143,7 +144,7 @@ public class JDBCFoodDao implements FoodDao {
         PreparedStatement stmt = connection.prepareStatement(" select * from food ORDER BY ?");
         stmt.setString(1, sortBy);
         ResultSet rs = stmt.executeQuery();
-        FoodMapper foodMapper = new FoodMapper();
+        ObjectMapper<Food> foodMapper = new FoodMapper();
 
         while (rs.next()) {
             Food food = foodMapper
@@ -171,7 +172,7 @@ public class JDBCFoodDao implements FoodDao {
         ResultSet rs = stmt.executeQuery();
 
         List<Food> foods = new ArrayList<>();
-        FoodMapper foodMapper = new FoodMapper();
+        ObjectMapper<Food> foodMapper = new FoodMapper();
 
         while (rs.next()) {
             Food food = foodMapper

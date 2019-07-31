@@ -1,6 +1,7 @@
 package ua.training.model.dao.impl;
 
 import ua.training.model.dao.UserDao;
+import ua.training.model.dao.mapper.ObjectMapper;
 import ua.training.model.dao.mapper.UserMapper;
 import ua.training.model.entity.User;
 
@@ -66,7 +67,7 @@ public class JDBCUserDao implements UserDao {
             ps.setString(1, email);
             ResultSet rs;
             rs = ps.executeQuery();
-            UserMapper mapper = new UserMapper();
+            ObjectMapper<User> mapper = new UserMapper();
             if (rs.next()) {
                 result = Optional.of(mapper.extractFromResultSet(rs));
             }
