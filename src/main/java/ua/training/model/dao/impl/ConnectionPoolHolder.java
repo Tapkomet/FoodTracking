@@ -6,9 +6,10 @@ import javax.sql.DataSource;
 
 public class ConnectionPoolHolder {
     private static volatile DataSource dataSource;
-    public static DataSource getDataSource(){
 
-        if (dataSource == null){
+    public static DataSource getDataSource() {
+
+        if (dataSource == null) {
             synchronized (ConnectionPoolHolder.class) {
                 if (dataSource == null) {
                     BasicDataSource ds = new BasicDataSource();

@@ -1,4 +1,5 @@
 package ua.training.controller.util;
+
 public interface Path {
     String CLIENT = "/api/client";
     String ADMIN = "/api/admin";

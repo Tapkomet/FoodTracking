@@ -29,7 +29,7 @@ public interface Command {
         try {
             method = this.getClass().getMethod(path, HttpServletRequest.class, HttpServletResponse.class);
             method.invoke(this, request, response);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println(e);
         }
     }

@@ -52,8 +52,8 @@ public class Food {
 
     @Override
     public String toString() {
-        return "User{" +
-                "id=" + id +
+        return "Food{" +
+                "food_id=" + id +
                 ", name='" + name +
                 ", calories=" + calories +
                 ", protein=" + protein +

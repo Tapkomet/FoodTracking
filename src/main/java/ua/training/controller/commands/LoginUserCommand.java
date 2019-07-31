@@ -16,7 +16,7 @@ import java.util.Optional;
 public class LoginUserCommand implements Command {
 
     private static final Logger logger = LogManager.getLogger(LoginUserCommand.class);
-    private UserService userService ;
+    private UserService userService;
 
     public LoginUserCommand(UserService userService) {
         this.userService = userService;
@@ -26,17 +26,17 @@ public class LoginUserCommand implements Command {
     public void execute(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
-        if( email == null || email.equals("") || pass == null || pass.equals("")  ){
+        if (email == null || email.equals("") || pass == null || pass.equals("")) {
             forward(request, response, Path.LOGIN);
         }
         Optional<User> user = userService.login(email);
-        if( user.isPresent() && user.get().getPassword().equals(pass)){
-            request.getSession().setAttribute("user" , user.get());
+        if (user.isPresent() && user.get().getPassword().equals(pass)) {
+            request.getSession().setAttribute("user", user.get());
             logger.info("User " + email + " logged successfully.");
             forward(request, response, Path.FOOD_LIST);
 
         }
-        logger.info("Invalid attempt of login user:'"+ email+"'");
+        logger.info("Invalid attempt of login user:'" + email + "'");
         forward(request, response, Path.LOGIN);
     }
 }
