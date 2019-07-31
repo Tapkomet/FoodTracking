@@ -23,21 +23,21 @@ public class Servlet extends HttpServlet {
         super.init(servletConfig);
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
-        commands.put("client/food/getOne",
+        commands.put(Path.CLIENT_FOOD,
                 new FoodCommands(new FoodService()));
-        commands.put("client/food/getAll",
+        commands.put(Path.CLIENT_FOODS,
                 new FoodCommands(new FoodService()));
-        commands.put("client/food/add",
+        commands.put(Path.CLIENT_ADD_FOOD,
                 new FoodCommands(new FoodService()));
-        commands.put("client/food/edit",
+        commands.put(Path.CLIENT_DELETE_FOOD,
                 new FoodCommands(new FoodService()));
-        commands.put("client/food/delete",
+        commands.put(Path.CLIENT_EDIT_FOOD,
                 new FoodCommands(new FoodService()));
-        commands.put("user-login",
+        commands.put(Path.USER_LOGIN,
                 new LoginUserCommand(new UserService()));
-        commands.put("user-register",
+        commands.put(Path.USER_REGISTER,
                 new RegisterUserCommand(new UserService()));
-        commands.put("exception", new ExceptionCommand());
+        commands.put(Path.EXCEPTION, new ExceptionCommand());
     }
 
     public void doGet(HttpServletRequest request,
@@ -47,7 +47,6 @@ public class Servlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
         String path = request.getRequestURI();
-        path = path.replaceAll(".*/api/", "");
         Command command = commands.containsKey(path) ? commands.get(path) : commands.get(Path.INDEX);
         command.execute(request, response);
     }
