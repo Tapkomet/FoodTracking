@@ -1,9 +1,10 @@
 package ua.training.controller;
 
 import ua.training.controller.commands.*;
-import ua.training.controller.util.Path;
 import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
+
+import static ua.training.controller.util.Path.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -15,6 +16,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
+
 public class Servlet extends HttpServlet {
 
     private Map<String, Command> commands = new HashMap<>();
@@ -23,21 +25,21 @@ public class Servlet extends HttpServlet {
         super.init(servletConfig);
         servletConfig.getServletContext()
                 .setAttribute("loggedUsers", new HashSet<String>());
-        commands.put(Path.CLIENT_FOOD,
+        commands.put(CLIENT_FOOD.label,
                 new FoodCommands(new FoodService()));
-        commands.put(Path.CLIENT_FOODS,
+        commands.put(CLIENT_FOODS.label,
                 new FoodCommands(new FoodService()));
-        commands.put(Path.CLIENT_ADD_FOOD,
+        commands.put(CLIENT_ADD_FOOD.label,
                 new FoodCommands(new FoodService()));
-        commands.put(Path.CLIENT_DELETE_FOOD,
+        commands.put(CLIENT_DELETE_FOOD.label,
                 new FoodCommands(new FoodService()));
-        commands.put(Path.CLIENT_EDIT_FOOD,
+        commands.put(CLIENT_EDIT_FOOD.label,
                 new FoodCommands(new FoodService()));
-        commands.put(Path.USER_LOGIN,
+        commands.put(USER_LOGIN.label,
                 new LoginUserCommand(new UserService()));
-        commands.put(Path.USER_REGISTER,
+        commands.put(USER_REGISTER.label,
                 new RegisterUserCommand(new UserService()));
-        commands.put(Path.EXCEPTION, new ExceptionCommand());
+        commands.put(EXCEPTION.label, new ExceptionCommand());
     }
 
     public void doGet(HttpServletRequest request,
@@ -47,7 +49,7 @@ public class Servlet extends HttpServlet {
         response.setCharacterEncoding("UTF-8");
         request.setCharacterEncoding("UTF-8");
         String path = request.getRequestURI();
-        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(Path.INDEX);
+        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(INDEX.label);
         command.execute(request, response);
     }
 

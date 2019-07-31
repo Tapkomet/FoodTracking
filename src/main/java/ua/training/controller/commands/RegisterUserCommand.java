@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+import static ua.training.controller.util.Path.*;
+
 
 public class RegisterUserCommand implements Command {
 
@@ -26,10 +28,10 @@ public class RegisterUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if (email == null || email.equals("") || pass == null || pass.equals("")) {
-            forward(request, response, Path.INDEX);
+            forward(request, response, INDEX.label);
         }
         userService.register(surname, email, pass);
         logger.info("Registration attempt");
-        forward(request, response, Path.INDEX);
+        forward(request, response, INDEX.label);
     }
 }

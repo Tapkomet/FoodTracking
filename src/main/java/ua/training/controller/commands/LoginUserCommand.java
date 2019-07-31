@@ -6,6 +6,8 @@ import ua.training.controller.util.Path;
 import ua.training.model.entity.User;
 import ua.training.model.service.UserService;
 
+import static ua.training.controller.util.Path.*;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -27,16 +29,16 @@ public class LoginUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if (email == null || email.equals("") || pass == null || pass.equals("")) {
-            forward(request, response, Path.LOGIN);
+            forward(request, response, LOGIN.label);
         }
         Optional<User> user = userService.login(email);
         if (user.isPresent() && user.get().getPassword().equals(pass)) {
             request.getSession().setAttribute("user", user.get());
             logger.info("User " + email + " logged successfully.");
-            forward(request, response, Path.FOOD_LIST);
+            forward(request, response, FOOD_LIST.label);
 
         }
         logger.info("Invalid attempt of login user:'" + email + "'");
-        forward(request, response, Path.LOGIN);
+        forward(request, response, LOGIN.label);
     }
 }

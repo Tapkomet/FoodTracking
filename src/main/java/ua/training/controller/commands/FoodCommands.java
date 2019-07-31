@@ -16,6 +16,8 @@ import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
 
+import static ua.training.controller.util.Path.*;
+
 public class FoodCommands implements CommandCRUD, Command {
 
     private FoodService foodService;
@@ -91,7 +93,7 @@ public class FoodCommands implements CommandCRUD, Command {
             getAll(request, response);
             return;
         }
-        redirect(request, response, Path.CLIENT_FOODS);
+        redirect(request, response, CLIENT_FOODS.label);
     }
 
     @Override
@@ -106,7 +108,7 @@ public class FoodCommands implements CommandCRUD, Command {
             logger.debug("Database error when requesting food {}" + id);
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
         }
-        forward(request, response, Path.FOOD);
+        forward(request, response, FOOD.label);
 
     }
 
@@ -142,7 +144,7 @@ public class FoodCommands implements CommandCRUD, Command {
         } catch (SQLException e) {
             logger.debug("Database error when requesting food count");
             request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
-            forward(request, response, Path.FOOD_LIST);
+            forward(request, response, FOOD_LIST.label);
             return;
         }
 
@@ -169,7 +171,7 @@ public class FoodCommands implements CommandCRUD, Command {
         }
 
 
-        forward(request, response, Path.FOOD_LIST);
+        forward(request, response, FOOD_LIST.label);
     }
 
     @Override
@@ -184,7 +186,7 @@ public class FoodCommands implements CommandCRUD, Command {
             getAll(request, response);
             return;
         }
-        redirect(request, response, Path.CLIENT_FOODS);
+        redirect(request, response, CLIENT_FOODS.label);
     }
 
     private boolean numberFormatIsWrong(HttpServletRequest request, HttpServletResponse response, String paramName,

@@ -8,6 +8,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
+import static ua.training.controller.util.Path.ERROR;
+
 public class ExceptionCommand implements Command {
 
     /**
@@ -36,6 +38,6 @@ public class ExceptionCommand implements Command {
                 request.setAttribute("message", "An error has occurred");
         }
 
-        forward(request, response, Path.ERROR);
+        forward(request, response, ERROR.label);
     }
 }
