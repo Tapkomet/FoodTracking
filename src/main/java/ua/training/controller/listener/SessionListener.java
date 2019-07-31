@@ -8,7 +8,7 @@ import static ua.training.controller.util.AppConstants.LOGGED_USERS;
 
 
 public class SessionListener implements HttpSessionListener {
-    public static final String USER_NAME = "userName";
+    private static final String USER_NAME = "userName";
 
     @Override
     public void sessionCreated(HttpSessionEvent httpSessionEvent) {
