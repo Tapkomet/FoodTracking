@@ -11,6 +11,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static ua.training.controller.commands.FoodCommands.FoodFields.NAME;
+
 public class JDBCFoodDao implements FoodDao {
     private Connection connection;
 
@@ -155,7 +157,7 @@ public class JDBCFoodDao implements FoodDao {
     @Override
     public List<Food> findNumberSorted(String sortBy, int integer, int offset) throws SQLException {
         PreparedStatement stmt = null;
-        if (sortBy.equals("name")) {
+        if (sortBy.equals(NAME.field)) {
             stmt = connection.prepareStatement
                     (" select * from food order by name limit ? offset ?");
         } else {

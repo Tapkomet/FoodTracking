@@ -2,7 +2,6 @@ package ua.training.controller.commands;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
-import ua.training.controller.util.Path;
 import ua.training.controller.util.Regex;
 import ua.training.model.entity.Food;
 import ua.training.model.service.FoodService;
@@ -11,15 +10,19 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.sql.SQLException;
 import java.util.List;
 
+import static ua.training.controller.commands.FoodCommands.FoodFields.*;
+import static ua.training.controller.commands.FoodCommands.FoodLoggerMessageEnum.*;
+import static ua.training.controller.commands.FoodCommands.FoodRequestAttributeStrings.*;
 import static ua.training.controller.util.Path.*;
 
 public class FoodCommands implements CommandCRUD, Command {
 
+    private static final String ADD = "add";
+    private static final String PREVIOUS = "previous";
+    private static final String NEXT = "next";
     private FoodService foodService;
     private static final Logger logger = LogManager.getLogger(FoodCommands.class);
     private final int ROWS_ON_PAGE = 5;
@@ -28,16 +31,65 @@ public class FoodCommands implements CommandCRUD, Command {
         this.foodService = foodService;
     }
 
+    public enum FoodFields {
+        FOOD_ID("food_id"),
+        NAME("name"),
+        CALORIES("calories"),
+        PROTEIN("protein"),
+        FAT("fat"),
+        CARBOHYDRATES("carbohydrates");
+        public final String field;
+
+        FoodFields(String field) {
+            this.field = field;
+        }
+    }
+
+    enum FoodLoggerMessageEnum {
+        FOOD_DB_ERROR("Database error when requesting food {}"),
+        PAGE_NUMBER_TEMPLATE(":: page = {}"),
+        FOOD_COUNT_DB_ERROR("Database error when requesting food count"),
+        FOODS_DB_ERROR("Database error when requesting foods");
+        public final String message;
+
+        FoodLoggerMessageEnum(String message) {
+            this.message = message;
+        }
+    }
+
+    enum FoodRequestAttributeStrings {
+        NAME_ERROR_MESSAGE("name_error_message"),
+        SQL_ERROR_MESSAGE("sql_error_message"),
+        FOOD("food"),
+        FOODS("foods"),
+        PUT_IN_NAME("Put in the name"),
+        DATABASE_PROBLEM("Database problem: "),
+        TOSORT("tosort"),
+        PAGE("page"),
+        NEXT_PAGE("nextPage"),
+        LAST_PAGE("lastPage"),
+        NEXT(FoodCommands.NEXT),
+        PREVIOUS(FoodCommands.PREVIOUS),
+        ERROR_MESSAGE_TEMPLATE("_error_message"),
+        INVALID("Invalid ");
+        public final String label;
+
+        FoodRequestAttributeStrings(String label) {
+            this.label = label;
+        }
+    }
+
 
     @Override
-    public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
+    public void execute(HttpServletRequest request, HttpServletResponse response)
+            throws IOException, ServletException {
         determineMethod(request, response);
     }
 
     @Override
     public void add(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        addOrEdit(request, response, "add");
+        addOrEdit(request, response, ADD);
     }
 
     @Override
@@ -48,17 +100,17 @@ public class FoodCommands implements CommandCRUD, Command {
 
     private void addOrEdit(HttpServletRequest request, HttpServletResponse response, String operation)
             throws ServletException, IOException {
-        String foodIdStr = request.getParameter("food_id");
-        String caloriesStr = request.getParameter("calories");
-        String proteinStr = request.getParameter("protein");
-        String fatStr = request.getParameter("fat");
-        String carbohydratesStr = request.getParameter("carbohydrates");
+        String foodIdStr = request.getParameter(FOOD_ID.field);
+        String caloriesStr = request.getParameter(CALORIES.field);
+        String proteinStr = request.getParameter(PROTEIN.field);
+        String fatStr = request.getParameter(FAT.field);
+        String carbohydratesStr = request.getParameter(CARBOHYDRATES.field);
 
-        if (numberFormatIsWrong(request, response, "id", foodIdStr)
-                || numberFormatIsWrong(request, response, "calories", caloriesStr)
-                || numberFormatIsWrong(request, response, "protein", proteinStr)
-                || numberFormatIsWrong(request, response, "fat", fatStr)
-                || numberFormatIsWrong(request, response, "carbohydrates", carbohydratesStr))
+        if (numberFormatIsWrong(request, response, FOOD_ID.field, foodIdStr)
+                || numberFormatIsWrong(request, response, CALORIES.field, caloriesStr)
+                || numberFormatIsWrong(request, response, PROTEIN.field, proteinStr)
+                || numberFormatIsWrong(request, response, FAT.field, fatStr)
+                || numberFormatIsWrong(request, response, CARBOHYDRATES.field, carbohydratesStr))
             return;
 
         int foodId = Integer.parseInt(foodIdStr);
@@ -67,9 +119,9 @@ public class FoodCommands implements CommandCRUD, Command {
         int fat = Integer.parseInt(fatStr);
         int carbohydrates = Integer.parseInt(carbohydratesStr);
 
-        String name = request.getParameter("name");
+        String name = request.getParameter(NAME.field);
         if (name == null || name.equals("")) {
-            request.setAttribute("name_error_message", "Put in the name");
+            request.setAttribute(NAME_ERROR_MESSAGE.label, PUT_IN_NAME.label);
             getAll(request, response);
             return;
         }
@@ -83,14 +135,13 @@ public class FoodCommands implements CommandCRUD, Command {
                 .build();
 
         try {
-            if (operation.equals("add")) {
+            if (operation.equals(ADD)) {
                 foodService.create(food);
             } else {
                 foodService.update(food);
             }
         } catch (SQLException e) {
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
-            getAll(request, response);
+            showError(request, response, e);
             return;
         }
         redirect(request, response, CLIENT_FOODS.label);
@@ -99,40 +150,40 @@ public class FoodCommands implements CommandCRUD, Command {
     @Override
     public void getOne(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sid = request.getParameter("food_id");
+        String sid = request.getParameter(FOOD_ID.field);
         int id = Integer.parseInt(sid);
         try {
             Food food = foodService.getFoodById(id);
-            request.setAttribute("food", food);
+            request.setAttribute(FOOD.label, food);
         } catch (SQLException e) {
-            logger.debug("Database error when requesting food {}" + id);
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
+            logger.debug(FOOD_DB_ERROR.message + id);
+            request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
         }
-        forward(request, response, FOOD.label);
+        forward(request, response, FOOD_JSP.label);
 
     }
 
     @Override
     public void getAll(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sortBy = request.getParameter("tosort");
+        String sortBy = request.getParameter(TOSORT.label);
         if (sortBy == null || sortBy.equals("")) {
-            sortBy = "food_id";
+            sortBy = FOOD_ID.field;
         }
 
-        String pageString = request.getParameter("page");
+        String pageString = request.getParameter(PAGE.label);
         int page;
         if (pageString == null || pageString.isEmpty()) {
-            logger.debug(":: page = {}", pageString);
+            logger.debug(PAGE_NUMBER_TEMPLATE.message, pageString);
             page = 1;
         } else {
             page = Integer.parseInt(pageString);
         }
         int nextPage;
-        String nextPageString = request.getParameter("nextPage");
-        if ("previous".equals(nextPageString)) {
+        String nextPageString = request.getParameter(NEXT_PAGE.label);
+        if (PREVIOUS.equals(nextPageString)) {
             nextPage = page - 1;
-        } else if ("next".equals(nextPageString)) {
+        } else if (NEXT.equals(nextPageString)) {
             nextPage = page + 1;
         } else {
             nextPage = page;
@@ -142,9 +193,9 @@ public class FoodCommands implements CommandCRUD, Command {
         try {
             foodAmount = foodService.getFoodCount();
         } catch (SQLException e) {
-            logger.debug("Database error when requesting food count");
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
-            forward(request, response, FOOD_LIST.label);
+            logger.debug(FOOD_COUNT_DB_ERROR.message);
+            request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
+            forward(request, response, FOOD_LIST_JSP.label);
             return;
         }
 
@@ -161,29 +212,28 @@ public class FoodCommands implements CommandCRUD, Command {
                 foods = foodService.getFoodsSorted(sortBy, ROWS_ON_PAGE, offset);
                 page = lastPage;
             }
-            request.setAttribute("tosort", sortBy);
-            request.setAttribute("foods", foods);
-            request.setAttribute("page", page);
-            request.setAttribute("lastPage", lastPage);
+            request.setAttribute(TOSORT.label, sortBy);
+            request.setAttribute(FOODS.label, foods);
+            request.setAttribute(PAGE.label, page);
+            request.setAttribute(LAST_PAGE.label, lastPage);
         } catch (SQLException e) {
-            logger.debug("Database error when requesting foods");
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
+            logger.debug(FOODS_DB_ERROR.message);
+            request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
         }
 
 
-        forward(request, response, FOOD_LIST.label);
+        forward(request, response, FOOD_LIST_JSP.label);
     }
 
     @Override
     public void delete(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String sid = request.getParameter("food_id");
+        String sid = request.getParameter(FOOD_ID.field);
         int foodId = Integer.parseInt(sid);
         try {
             foodService.delete(foodId);
         } catch (SQLException e) {
-            request.setAttribute("sql_error_message", "Database problem: " + e.getMessage());
-            getAll(request, response);
+            showError(request, response, e);
             return;
         }
         redirect(request, response, CLIENT_FOODS.label);
@@ -192,11 +242,17 @@ public class FoodCommands implements CommandCRUD, Command {
     private boolean numberFormatIsWrong(HttpServletRequest request, HttpServletResponse response, String paramName,
                                         String foodIdStr) throws ServletException, IOException {
         if (Regex.isNumberWrong(foodIdStr)) {
-            request.setAttribute(paramName + "_error_message", "Invalid " + paramName);
+            request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, INVALID.label + paramName);
             getAll(request, response);
             return true;
         }
         return false;
+    }
+
+    private void showError(HttpServletRequest request, HttpServletResponse response, SQLException e)
+            throws ServletException, IOException {
+        request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
+        getAll(request, response);
     }
 }
 

@@ -6,18 +6,33 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
+import static ua.training.model.dao.mapper.FoodMapper.FoodDatabaseFields.*;
+
 public class FoodMapper implements ObjectMapper<Food> {
 
+   enum FoodDatabaseFields {
+        FOOD_ID("food_id"),
+        NAME("name"),
+        CALORIES("calories"),
+        PROTEIN("protein"),
+        FAT("fat"),
+        CARBOHYDRATES("carbohydrates");
+        public final String field;
+
+        FoodDatabaseFields(String field) {
+            this.field = field;
+        }
+    }
 
     @Override
     public Food extractFromResultSet(ResultSet rs) throws SQLException {
         Food food = new Food();
-        food.setId(rs.getInt("food_id"));
-        food.setName(rs.getString("name"));
-        food.setCalories(rs.getInt("calories"));
-        food.setProtein(rs.getInt("protein"));
-        food.setFat(rs.getInt("fat"));
-        food.setCarbohydrates(rs.getInt("carbohydrates"));
+        food.setId(rs.getInt(FOOD_ID.field));
+        food.setName(rs.getString(NAME.field));
+        food.setCalories(rs.getInt(CALORIES.field));
+        food.setProtein(rs.getInt(PROTEIN.field));
+        food.setFat(rs.getInt(FAT.field));
+        food.setCarbohydrates(rs.getInt(CARBOHYDRATES.field));
         return food;
     }
 

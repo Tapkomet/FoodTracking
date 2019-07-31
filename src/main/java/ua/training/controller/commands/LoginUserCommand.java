@@ -29,16 +29,16 @@ public class LoginUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if (email == null || email.equals("") || pass == null || pass.equals("")) {
-            forward(request, response, LOGIN.label);
+            forward(request, response, LOGIN_JSP.label);
         }
         Optional<User> user = userService.login(email);
         if (user.isPresent() && user.get().getPassword().equals(pass)) {
             request.getSession().setAttribute("user", user.get());
             logger.info("User " + email + " logged successfully.");
-            forward(request, response, FOOD_LIST.label);
+            forward(request, response, FOOD_LIST_JSP.label);
 
         }
         logger.info("Invalid attempt of login user:'" + email + "'");
-        forward(request, response, LOGIN.label);
+        forward(request, response, LOGIN_JSP.label);
     }
 }

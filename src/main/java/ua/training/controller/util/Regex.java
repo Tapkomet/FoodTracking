@@ -3,6 +3,9 @@ package ua.training.controller.util;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import static ua.training.controller.util.Regex.RegexEnum.*;
+import static ua.training.controller.util.Regex.RegexLoggerMessageEnum.*;
+
 /**
  * Class for Regex and methods to compare with regex
  */
@@ -10,40 +13,64 @@ public class Regex {
 
     private static final Logger logger = LogManager.getLogger(Regex.class.getName());
 
-    private static final String SURNAME_REGEX = "^[a-zA-Z\\\\s]+";
-    private static final String PASSWORD_REGEX = "^(?=\\S+$).{5,}$";
-    private static final String EMAIL_REGEX = "^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$";
-    private static final String NUMBER_REGEX = "[\\d]+";
+    public enum RegexEnum {
+        SURNAME("^[a-zA-Z\\\\s]+"),
+        PASSWORD("^(?=\\S+$).{5,}$"),
+        EMAIL("^([\\w-\\.]+){1,64}@([\\w&&[^_]]+){2,255}.[a-z]{2,}$"),
+        NUMBER("[\\d]+");
+        public final String regex;
 
-    public static boolean isNumberWrong(String numberString) {
-        if (numberString == null) {
-            return true;
+        RegexEnum(String regex) {
+            this.regex = regex;
         }
-        logger.debug("number.matches({}) : {}", numberString, numberString.matches(NUMBER_REGEX));
-        return !numberString.matches(NUMBER_REGEX);
+    }
+
+    public enum RegexLoggerMessageEnum {
+        SURNAME_MATCHES("surname.matches({}) : {}"),
+        PASSWORD_MATCHES("password.matches({}) : {}"),
+        EMAIL_MATCHES("email.matches({}) : {}"),
+        NUMBER_MATCHES("number.matches({}) : {}");
+        public final String message;
+
+        RegexLoggerMessageEnum(String message) {
+            this.message = message;
+        }
     }
 
     public static boolean isSurnameWrong(String surname) {
         if (surname == null) {
             return true;
         }
-        logger.debug("surname.matches({}) : {}", surname, surname.matches(SURNAME_REGEX));
-        return !surname.matches(SURNAME_REGEX);
+        boolean match = surname.matches(SURNAME.regex);
+        logger.debug(SURNAME_MATCHES.message, surname, match);
+        return !match;
+    }
+
+    public static boolean isPasswordWrong(String password) {
+        if (password == null || password.isEmpty()) {
+            return true;
+        }
+        boolean match = password.matches(PASSWORD.regex);
+        logger.debug(PASSWORD_MATCHES.message, password, match);
+        return !match;
     }
 
     public static boolean isEmailWrong(String email) {
         if (email == null) {
             return true;
         }
-        logger.debug("email.matches({}) : {}", email, email.matches(EMAIL_REGEX));
-        return !email.matches(EMAIL_REGEX);
+        boolean match = email.matches(EMAIL.regex);
+        logger.debug(EMAIL_MATCHES.message, email, match);
+        return !match;
     }
 
-    public static boolean isPasswordWrong(String password) {
-        logger.debug("password : {}", password);
-        if (password == null || password.isEmpty()) {
+
+    public static boolean isNumberWrong(String numberString) {
+        if (numberString == null) {
             return true;
         }
-        return !password.matches(PASSWORD_REGEX);
+        boolean match = numberString.matches(NUMBER.regex);
+        logger.debug(NUMBER_MATCHES.message, numberString, match);
+        return !match;
     }
 }

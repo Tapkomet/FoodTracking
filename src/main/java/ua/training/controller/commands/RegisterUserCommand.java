@@ -28,10 +28,10 @@ public class RegisterUserCommand implements Command {
         String email = request.getParameter("email");
         String pass = request.getParameter("pass");
         if (email == null || email.equals("") || pass == null || pass.equals("")) {
-            forward(request, response, INDEX.label);
+            forward(request, response, INDEX_JSP.label);
         }
         userService.register(surname, email, pass);
         logger.info("Registration attempt");
-        forward(request, response, INDEX.label);
+        forward(request, response, INDEX_JSP.label);
     }
 }

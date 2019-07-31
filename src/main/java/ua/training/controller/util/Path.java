@@ -10,20 +10,20 @@ public enum Path {
     CLIENT_ADD_FOOD("/api/client/food/add"),
     CLIENT_EDIT_FOOD("/api/client/food/edit"),
     CLIENT_DELETE_FOOD("/api/client/food/delete"),
-    USER_LOGIN("/api/user-login"),
+    USER_LOGIN_JSP("/api/user-login"),
     USER_LOGOUT("/api/logout"),
     USER_REGISTER("/api/user-register"),
     EXCEPTION("/api/exception"),
 
-    ADMIN_BASE("/WEB-INF/adminbase.jsp"),
-    CLIENT_BASE("/WEB-INF/clientbase.jsp"),
-    ERROR("/WEB-INF/error.jsp"),
-    FOOD_LIST("/WEB-INF/foodlist.jsp"),
-    USER_LIST("/WEB-INF/userlist.jsp"),
-    FOOD("/WEB-INF/food.jsp"),
-    INDEX("/index.jsp"),
-    LOGIN("/login.jsp"),
-    REGISTRATION("/registration.jsp");
+    ADMIN_BASE_JSP("/WEB-INF/adminbase.jsp"),
+    CLIENT_BASE_JSP("/WEB-INF/clientbase.jsp"),
+    ERROR_JSP("/WEB-INF/error.jsp"),
+    FOOD_LIST_JSP("/WEB-INF/foodlist.jsp"),
+    USER_LIST_JSP("/WEB-INF/userlist.jsp"),
+    FOOD_JSP("/WEB-INF/food.jsp"),
+    INDEX_JSP("/index.jsp"),
+    LOGIN_JSP("/login.jsp"),
+    REGISTRATION_JSP("/registration.jsp");
 
     public final String label;
 

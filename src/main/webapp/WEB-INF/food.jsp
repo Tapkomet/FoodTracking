@@ -20,7 +20,7 @@
         <br>
         <form action="${pageContext.request.contextPath}/api/client/food/edit" method="post">
              Id <input type="number" name="food_id" value="${food.id}" readonly/><br>
-             <c:if test="${not empty id_error_message}">
+             <c:if test="${not empty food_id_error_message}">
                 <p class="error">${id_error_message}</p>
              </c:if>
              Name <input type="text" name="name" value="${food.name}" /><br>

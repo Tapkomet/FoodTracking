@@ -8,9 +8,13 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 
-import static ua.training.controller.util.Path.ERROR;
+import static ua.training.controller.util.Path.ERROR_JSP;
 
 public class ExceptionCommand implements Command {
+
+    public static final String MESSAGE = "message";
+    public static final String JAVAX_SERVLET_ERROR_STATUS_CODE = "javax.servlet.error.status_code";
+    public static final String CODE = "code";
 
     /**
      * Handles exceptions that aren't handled individually elsewhere.
@@ -23,21 +27,21 @@ public class ExceptionCommand implements Command {
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-        Integer statusCode = (Integer) request.getAttribute("javax.servlet.error.status_code");
-        request.setAttribute("code", statusCode);
+        Integer statusCode = (Integer) request.getAttribute(JAVAX_SERVLET_ERROR_STATUS_CODE);
+        request.setAttribute(CODE, statusCode);
         switch (statusCode) {
             case 500:
-                request.setAttribute("message", "Internal server error");
+                request.setAttribute(MESSAGE, "Internal server error");
                 break;
 
             case 404:
-                request.setAttribute("message", "Not found");
+                request.setAttribute(MESSAGE, "Not found");
                 break;
 
             default:
-                request.setAttribute("message", "An error has occurred");
+                request.setAttribute(MESSAGE, "An error has occurred");
         }
 
-        forward(request, response, ERROR.label);
+        forward(request, response, ERROR_JSP.label);
     }
 }

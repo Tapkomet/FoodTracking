@@ -5,6 +5,7 @@ import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
 
 import static ua.training.controller.util.Path.*;
+import static ua.training.controller.util.AppConstants.*;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -24,7 +25,7 @@ public class Servlet extends HttpServlet {
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         servletConfig.getServletContext()
-                .setAttribute("loggedUsers", new HashSet<String>());
+                .setAttribute(LOGGED_USERS.label, new HashSet<String>());
         commands.put(CLIENT_FOOD.label,
                 new FoodCommands(new FoodService()));
         commands.put(CLIENT_FOODS.label,
@@ -35,7 +36,7 @@ public class Servlet extends HttpServlet {
                 new FoodCommands(new FoodService()));
         commands.put(CLIENT_EDIT_FOOD.label,
                 new FoodCommands(new FoodService()));
-        commands.put(USER_LOGIN.label,
+        commands.put(USER_LOGIN_JSP.label,
                 new LoginUserCommand(new UserService()));
         commands.put(USER_REGISTER.label,
                 new RegisterUserCommand(new UserService()));
@@ -45,11 +46,11 @@ public class Servlet extends HttpServlet {
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
             throws IOException, ServletException {
-        response.setContentType("text/html");
-        response.setCharacterEncoding("UTF-8");
-        request.setCharacterEncoding("UTF-8");
+        response.setContentType(TYPE_TEXT_HTML.label);
+        response.setCharacterEncoding(UTF8.label);
+        request.setCharacterEncoding(UTF8.label);
         String path = request.getRequestURI();
-        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(INDEX.label);
+        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(INDEX_JSP.label);
         command.execute(request, response);
     }
 
