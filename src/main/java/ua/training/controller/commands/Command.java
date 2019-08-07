@@ -4,7 +4,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.lang.reflect.Method;
 
 
 public interface Command {
@@ -22,14 +21,6 @@ public interface Command {
 
     default void determineMethod(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String path = request.getRequestURI();
-        path = path.replaceAll(".*/", "");
-        Method method;
-        try {
-            method = this.getClass().getMethod(path, HttpServletRequest.class, HttpServletResponse.class);
-            method.invoke(this, request, response);
-        } catch (Exception e) {
-            System.err.println(e);
-        }
+
     }
 }
