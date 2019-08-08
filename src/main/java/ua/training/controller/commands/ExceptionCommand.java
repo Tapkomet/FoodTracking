@@ -21,8 +21,8 @@ public class ExceptionCommand implements Command {
     private static final Logger logger = LogManager.getLogger(ExceptionCommand.class);
 
     enum ExceptionLoggerMessageEnum {
-        INTERNAL_SERVER_ERROR("Error 500: Internal server error"),
-        NOT_FOUND_ERROR("Error 404: Not found"),
+        INTERNAL_SERVER_ERROR("Internal server error"),
+        NOT_FOUND_ERROR("Not found"),
         DEFAULT_ERROR("An error has occurred");
         public final String message;
 
@@ -47,17 +47,17 @@ public class ExceptionCommand implements Command {
         switch (statusCode) {
             case 500:
                 request.setAttribute(MESSAGE, INTERNAL_SERVER_ERROR);
-                logger.error(INTERNAL_SERVER_ERROR);
+                logger.error(INTERNAL_SERVER_ERROR.message);
                 break;
 
             case 404:
                 request.setAttribute(MESSAGE, NOT_FOUND_ERROR);
-                logger.error(NOT_FOUND_ERROR);
+                logger.error(NOT_FOUND_ERROR.message);
                 break;
 
             default:
                 request.setAttribute(MESSAGE, DEFAULT_ERROR);
-                logger.error(DEFAULT_ERROR);
+                logger.error(DEFAULT_ERROR.message);
         }
 
         forward(request, response, ERROR_JSP.label);

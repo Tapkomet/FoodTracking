@@ -82,8 +82,8 @@
                 <p class="error">${protein_error_message}</p>
              </c:if>
              Fat <input type="number" name="fat"/><br>
-             <c:if test="${not empty fat__error_message}">
-                <p class="error">${fat__error_message}</p>
+             <c:if test="${not empty fat_error_message}">
+                <p class="error">${fat_error_message}</p>
              </c:if>
              Carbohydrates <input type="number" name="carbohydrates"/><br>
              <c:if test="${not empty carbohydrates_error_message}">
