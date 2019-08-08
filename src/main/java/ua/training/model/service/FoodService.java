@@ -12,16 +12,15 @@ public class FoodService {
     DaoFactory daoFactory = DaoFactory.getInstance();
 
     public List<Food> getAllFoods() throws SQLException {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            return foodDao.findAll();
-        }
+        FoodDao foodDao = daoFactory.createFoodDao();
+        return foodDao.findAll();
     }
 
 
     public int getFoodCount() throws SQLException {
-        try (FoodDao foodDao = daoFactory.createFoodDao()) {
-            return foodDao.getCount();
-        }
+        FoodDao foodDao = daoFactory.createFoodDao();
+        return foodDao.getCount();
+
     }
 
     public Food getFoodById(int id) throws SQLException {
