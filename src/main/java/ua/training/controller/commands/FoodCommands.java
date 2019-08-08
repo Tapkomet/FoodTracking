@@ -174,11 +174,11 @@ public class FoodCommands implements CommandCRUD, Command {
         String pageString = request.getParameter(PAGE.label);
         int page;
         if (pageString == null || pageString.isEmpty()) {
-            logger.debug(PAGE_NUMBER_TEMPLATE.message, pageString);
             page = 1;
         } else {
             page = Integer.parseInt(pageString);
         }
+        logger.debug(PAGE_NUMBER_TEMPLATE.message, page);
         int nextPage;
         String nextPageString = request.getParameter(NEXT_PAGE.label);
         if (PREVIOUS.equals(nextPageString)) {
@@ -243,6 +243,7 @@ public class FoodCommands implements CommandCRUD, Command {
                                         String foodIdStr) throws ServletException, IOException {
         if (Regex.isNumberWrong(foodIdStr)) {
             request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, INVALID.label + paramName);
+            logger.error(INVALID.label + paramName);
             getAll(request, response);
             return true;
         }
@@ -252,6 +253,7 @@ public class FoodCommands implements CommandCRUD, Command {
     private void showError(HttpServletRequest request, HttpServletResponse response, SQLException e)
             throws ServletException, IOException {
         request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
+        logger.error(DATABASE_PROBLEM.label + e.getMessage());
         getAll(request, response);
     }
 }

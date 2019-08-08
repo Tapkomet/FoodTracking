@@ -1,5 +1,7 @@
 package ua.training.controller;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import ua.training.controller.commands.*;
 import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
@@ -19,7 +21,8 @@ import java.util.Map;
 
 
 public class Servlet extends HttpServlet {
-
+    private static final Logger logger = LogManager.getLogger(Servlet.class);
+    private static final String RECEIVED_REQUEST = "Received request on path ";
     private Map<String, Command> commands = new HashMap<>();
 
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -50,6 +53,8 @@ public class Servlet extends HttpServlet {
         response.setCharacterEncoding(UTF8.label);
         request.setCharacterEncoding(UTF8.label);
         String path = request.getRequestURI();
+        logger.debug(RECEIVED_REQUEST + path);
+
         Command command = commands.containsKey(path) ? commands.get(path) : commands.get(INDEX_JSP.label);
         command.execute(request, response);
     }

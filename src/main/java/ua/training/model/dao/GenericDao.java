@@ -1,5 +1,8 @@
 package ua.training.model.dao;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,4 +20,6 @@ public interface GenericDao<T> extends AutoCloseable {
     void close();
 
     int getCount() throws SQLException;
+
+    Logger logger = LogManager.getLogger(GenericDao.class);
 }
