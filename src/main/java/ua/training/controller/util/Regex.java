@@ -64,8 +64,7 @@ public class Regex {
         return !match;
     }
 
-
-    public static boolean isNumberWrong(String numberString) {
+    public static boolean isNumberFormatWrong(String numberString) {
         if (numberString == null) {
             return true;
         }

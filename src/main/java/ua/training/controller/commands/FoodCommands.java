@@ -12,6 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import static ua.training.controller.commands.FoodCommands.FoodFields.*;
 import static ua.training.controller.commands.FoodCommands.FoodLoggerMessageEnum.*;
@@ -23,6 +25,7 @@ public class FoodCommands implements CommandCRUD, Command {
     private static final String ADD = "add";
     private static final String PREVIOUS = "previous";
     private static final String NEXT = "next";
+    public static final int MAX_MILIGRAMS_PER_100_GRAMS = 100000;
     private FoodService foodService;
     private static final Logger logger = LogManager.getLogger(FoodCommands.class);
     private final int ROWS_ON_PAGE = 5;
@@ -46,7 +49,8 @@ public class FoodCommands implements CommandCRUD, Command {
     }
 
     enum FoodLoggerMessageEnum {
-        FOOD_DB_ERROR("Database error when requesting food {}"),
+        FOOD_DB_ERROR("Database error when requesting food by id "),
+        FOOD_DB_NOT_FOUND_ERROR("Element not found when requesting food by id "),
         PAGE_NUMBER_TEMPLATE(":: page = {}"),
         FOOD_COUNT_DB_ERROR("Database error when requesting food count"),
         FOODS_DB_ERROR("Database error when requesting foods");
@@ -71,7 +75,9 @@ public class FoodCommands implements CommandCRUD, Command {
         NEXT(FoodCommands.NEXT),
         PREVIOUS(FoodCommands.PREVIOUS),
         ERROR_MESSAGE_TEMPLATE("_error_message"),
-        INVALID("Invalid ");
+        INVALID("Invalid value "),
+        BELOW_ZERO("Value below zero "),
+        ABOVE_MAX("Value above 100 grams per 100 grams ");
         public final String label;
 
         FoodRequestAttributeStrings(String label) {
@@ -106,18 +112,15 @@ public class FoodCommands implements CommandCRUD, Command {
         String fatStr = request.getParameter(FAT.field);
         String carbohydratesStr = request.getParameter(CARBOHYDRATES.field);
 
-        if (numberFormatIsWrong(request, response, FOOD_ID.field, foodIdStr)
-                || numberFormatIsWrong(request, response, CALORIES.field, caloriesStr)
-                || numberFormatIsWrong(request, response, PROTEIN.field, proteinStr)
-                || numberFormatIsWrong(request, response, FAT.field, fatStr)
-                || numberFormatIsWrong(request, response, CARBOHYDRATES.field, carbohydratesStr))
-            return;
+        if (numberFieldsAreWrongFormat(request, response, caloriesStr, proteinStr, fatStr, carbohydratesStr)) return;
 
         int foodId = Integer.parseInt(foodIdStr);
         int calories = Integer.parseInt(caloriesStr);
         int protein = Integer.parseInt(proteinStr);
         int fat = Integer.parseInt(fatStr);
         int carbohydrates = Integer.parseInt(carbohydratesStr);
+
+        if(numberFieldsHaveWrongContent(request, response, calories, protein, fat, carbohydrates)) return;
 
         String name = request.getParameter(NAME.field);
         if (name == null || name.equals("")) {
@@ -153,10 +156,13 @@ public class FoodCommands implements CommandCRUD, Command {
         String sid = request.getParameter(FOOD_ID.field);
         int id = Integer.parseInt(sid);
         try {
-            Food food = foodService.getFoodById(id);
-            request.setAttribute(FOOD.label, food);
+            Optional<Food> food = foodService.getFoodById(id);
+            request.setAttribute(FOOD.label, food.get());
+        } catch (NoSuchElementException e) {
+            logger.error(FOOD_DB_NOT_FOUND_ERROR.message + id);
+            request.setAttribute(SQL_ERROR_MESSAGE.label, FOOD_DB_NOT_FOUND_ERROR.message + id);
         } catch (SQLException e) {
-            logger.debug(FOOD_DB_ERROR.message + id);
+            logger.error(FOOD_DB_ERROR.message + id);
             request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
         }
         forward(request, response, FOOD_JSP.label);
@@ -193,7 +199,7 @@ public class FoodCommands implements CommandCRUD, Command {
         try {
             foodAmount = foodService.getFoodCount();
         } catch (SQLException e) {
-            logger.debug(FOOD_COUNT_DB_ERROR.message);
+            logger.error(FOOD_COUNT_DB_ERROR.message);
             request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
             forward(request, response, FOOD_LIST_JSP.label);
             return;
@@ -217,7 +223,7 @@ public class FoodCommands implements CommandCRUD, Command {
             request.setAttribute(PAGE.label, page);
             request.setAttribute(LAST_PAGE.label, lastPage);
         } catch (SQLException e) {
-            logger.debug(FOODS_DB_ERROR.message);
+            logger.error(FOODS_DB_ERROR.message);
             request.setAttribute(SQL_ERROR_MESSAGE.label, DATABASE_PROBLEM.label + e.getMessage());
         }
 
@@ -239,10 +245,48 @@ public class FoodCommands implements CommandCRUD, Command {
         redirect(request, response, CLIENT_FOODS.label);
     }
 
+    private boolean numberFieldsAreWrongFormat(HttpServletRequest request, HttpServletResponse response,
+                                               String caloriesStr, String proteinStr, String fatStr,
+                                               String carbohydratesStr) throws ServletException, IOException {
+        return numberFormatIsWrong(request, response, CALORIES.field, caloriesStr)
+                || numberFormatIsWrong(request, response, PROTEIN.field, proteinStr)
+                || numberFormatIsWrong(request, response, FAT.field, fatStr)
+                || numberFormatIsWrong(request, response, CARBOHYDRATES.field, carbohydratesStr);
+    }
+
+
+    private boolean numberFieldsHaveWrongContent(HttpServletRequest request, HttpServletResponse response,
+                                                 int calories, int protein, int fat,
+                                                 int carbohydrates) throws ServletException, IOException {
+        return numberContentIsWrong(request, response, CALORIES.field, calories)
+                || numberContentIsWrong(request, response, PROTEIN.field, protein)
+                || numberContentIsWrong(request, response, FAT.field, fat)
+                || numberContentIsWrong(request, response, CARBOHYDRATES.field, carbohydrates);
+    }
+
+    private boolean numberContentIsWrong(HttpServletRequest request, HttpServletResponse response,
+                                         String paramName, int param) throws ServletException, IOException {
+        //block commented out because regex already precludes values below 0
+
+        /*if (param < 0) {
+            request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, BELOW_ZERO.label);
+            logger.error(BELOW_ZERO.label + paramName);
+            getAll(request, response);
+            return true;
+        }*/
+        if (param > MAX_MILIGRAMS_PER_100_GRAMS) {
+            request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, ABOVE_MAX.label);
+            logger.error(ABOVE_MAX.label + paramName);
+            getAll(request, response);
+            return true;
+        }
+        return false;
+    }
+
     private boolean numberFormatIsWrong(HttpServletRequest request, HttpServletResponse response, String paramName,
                                         String foodIdStr) throws ServletException, IOException {
-        if (Regex.isNumberWrong(foodIdStr)) {
-            request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, INVALID.label + paramName);
+        if (Regex.isNumberFormatWrong(foodIdStr)) {
+            request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, INVALID.label);
             logger.error(INVALID.label + paramName);
             getAll(request, response);
             return true;

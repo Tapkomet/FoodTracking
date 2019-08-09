@@ -6,6 +6,7 @@ import ua.training.model.entity.Food;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 
 public class FoodService {
 
@@ -25,10 +26,12 @@ public class FoodService {
 
     }
 
-    public Food getFoodById(int id) throws SQLException {
+    public Optional<Food> getFoodById(int id) throws SQLException {
+        Optional<Food> result;
         try(FoodDao foodDao = daoFactory.createFoodDao()){
-            return foodDao.findById(id);
+            result = foodDao.findById(id);
         }
+        return result;
     }
 
 

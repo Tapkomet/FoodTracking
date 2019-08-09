@@ -7,10 +7,7 @@ import ua.training.model.entity.Food;
 import ua.training.model.entity.User;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static ua.training.controller.commands.FoodCommands.FoodFields.NAME;
 import static ua.training.model.dao.impl.JDBCFoodDao.JDBCFoodLoggerMessageEnum.*;
@@ -63,7 +60,8 @@ public class JDBCFoodDao implements FoodDao {
     }
 
     @Override
-    public Food findById(int id) throws SQLException {
+    public Optional<Food> findById(int id) throws SQLException {
+        Optional<Food> food = Optional.empty();
         PreparedStatement stmt = connection.prepareStatement(
                 "select * from food where food_id = (?)");
         stmt.setInt(1, id);
@@ -71,8 +69,9 @@ public class JDBCFoodDao implements FoodDao {
         ResultSet rs = stmt.executeQuery();
         ObjectMapper<Food> foodMapper = new FoodMapper();
 
-        rs.next();
-        Food food = foodMapper.extractFromResultSet(rs);
+        if (rs.next()) {
+            food = Optional.of(foodMapper.extractFromResultSet(rs));
+        }
 
         stmt.close();
         connection.close();

@@ -6,6 +6,7 @@ import ua.training.controller.commands.*;
 import ua.training.model.service.FoodService;
 import ua.training.model.service.UserService;
 
+import static ua.training.controller.commands.ExceptionCommand.JAVAX_SERVLET_ERROR_STATUS_CODE;
 import static ua.training.controller.util.Path.*;
 import static ua.training.controller.util.AppConstants.*;
 
@@ -23,6 +24,7 @@ import java.util.Map;
 public class Servlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(Servlet.class);
     private static final String RECEIVED_REQUEST = "Received request on path ";
+    private static final String REQUEST_PATH_NOT_FOUND = "Request path not found";
     private Map<String, Command> commands = new HashMap<>();
 
     public void init(ServletConfig servletConfig) throws ServletException {
@@ -54,9 +56,17 @@ public class Servlet extends HttpServlet {
         request.setCharacterEncoding(UTF8.label);
         String path = request.getRequestURI();
         logger.debug(RECEIVED_REQUEST + path);
-
-        Command command = commands.containsKey(path) ? commands.get(path) : commands.get(INDEX_JSP.label);
-        command.execute(request, response);
+        Command command = null;
+        try{
+            command = commands.get(path);
+            command.execute(request, response);
+        }
+        catch (NullPointerException e){
+            logger.error(REQUEST_PATH_NOT_FOUND);
+            request.setAttribute(JAVAX_SERVLET_ERROR_STATUS_CODE, 404);
+            command = commands.get(EXCEPTION.label);
+            command.execute(request, response);
+        }
     }
 
     public void doPost(HttpServletRequest request, HttpServletResponse response)
