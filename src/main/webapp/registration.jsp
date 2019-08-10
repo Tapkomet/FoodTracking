@@ -28,17 +28,17 @@
         <br/>
 
         <br>
-        <form method="POST" action="${pageContext.request.contextPath}/api/user-register">
+        <form method="POST" action="${pageContext.request.contextPath}/api/user/add">
 
-            Surname <input type="text" name="surname"/><br>
+            Surname <input type="text" name="surname" required/><br>
             <c:if test="${not empty surname_error_message}">
             	<p class="error">${surname_error_message}</p>
             </c:if>
-            E-email <input type="text" name="email"/><br>
+            E-email <input type="text" name="email" required/><br>
             <c:if test="${not empty email_error_message}">
             	<p class="error">${email_error_message}</p>
             </c:if>
-            Password <input type="password" name = "pass"/><br>
+            Password <input type="password" name = "pass" required/><br>
             <c:if test="${not empty password_error_message}">
                 <p class="error">${password_error_message}</p>
             </c:if>
@@ -46,7 +46,8 @@
         </form>
 
         <p class="centre" style="margin-top: 30px">Already have an account? <a href="/login.jsp ">Sign In</a>.</p>
-
+        <br/>
+        <a href="${pageContext.request.contextPath}/index.jsp">index</a>
        </div>
     </body>
 </html>

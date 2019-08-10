@@ -4,8 +4,10 @@ package ua.training.controller.util;
  * Contains all the paths possible during the app's work
  */
 public enum Path {
-    CLIENT("/api/client"),
-    ADMIN("/api/admin"),
+    CLIENT("client"),
+    ADMIN("admin"),
+    CLIENT_BASE("/api/client"),
+    ADMIN_BASE("/api/admin"),
     ADMIN_USERS("/api/admin/users"),
     ADMIN_EDIT_USER("/api/admin/users/edit"),
     CLIENT_FOODS("/api/client/food/getAll"),
@@ -15,7 +17,7 @@ public enum Path {
     CLIENT_DELETE_FOOD("/api/client/food/delete"),
     USER_LOGIN_JSP("/api/user-login"),
     USER_LOGOUT("/api/logout"),
-    USER_REGISTER("/api/user-register"),
+    USER_REGISTER("/api/user/add"),
     EXCEPTION("/api/exception"),
 
     ADMIN_BASE_JSP("/WEB-INF/adminbase.jsp"),
@@ -26,7 +28,8 @@ public enum Path {
     FOOD_JSP("/WEB-INF/food.jsp"),
     INDEX_JSP("/index.jsp"),
     LOGIN_JSP("/login.jsp"),
-    REGISTRATION_JSP("/registration.jsp");
+    REGISTRATION_JSP("/registration.jsp"),
+    PROFILE_JSP("/profile.jsp");
 
     public final String label;
 

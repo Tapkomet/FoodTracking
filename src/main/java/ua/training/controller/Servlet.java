@@ -55,8 +55,9 @@ public class Servlet extends HttpServlet {
         commands.put(USER_LOGIN_JSP.label,
                 new LoginUserCommand(new UserService()));
         commands.put(USER_REGISTER.label,
-                new RegisterUserCommand(new UserService()));
+                new UserCommands(new UserService()));
         commands.put(EXCEPTION.label, new ExceptionCommand());
+        commands.put(CLIENT_BASE.label, new ClientCommand());
     }
 
     /**
