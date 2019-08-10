@@ -4,6 +4,13 @@ import org.apache.commons.dbcp.BasicDataSource;
 
 import javax.sql.DataSource;
 
+/**
+ * This class is responsible for managing connection to database directly.
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
 class ConnectionPoolHolder {
     private static final String JDBC_MYSQL_ADDRESS = "jdbc:mysql://localhost:3306/food_tracking";
     private static final String JDBC_USERNAME = "root";

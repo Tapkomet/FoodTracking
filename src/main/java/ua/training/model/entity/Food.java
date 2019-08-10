@@ -3,7 +3,13 @@ package ua.training.model.entity;
 import lombok.Data;
 
 import java.util.Comparator;
-
+/**
+ * This class implements the Food object type and its various methods
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
 @Data
 public class Food {
     private int id;

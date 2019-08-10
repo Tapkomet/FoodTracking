@@ -18,9 +18,9 @@ public class UserMapper implements ObjectMapper<User> {
         return user;
     }
 
-    public User makeUnique(Map<Integer, User> cache,
+    public void makeUnique(Map<Integer, User> cache,
                            User user) {
         cache.putIfAbsent(user.getId(), user);
-        return cache.get(user.getId());
+        cache.get(user.getId());
     }
 }

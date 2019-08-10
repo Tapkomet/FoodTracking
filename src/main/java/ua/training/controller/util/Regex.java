@@ -7,12 +7,19 @@ import static ua.training.controller.util.Regex.RegexEnum.*;
 import static ua.training.controller.util.Regex.RegexLoggerMessageEnum.*;
 
 /**
- * Class for Regex and methods to compare with regex
+ * This class contains Regex templates and methods to check various fields against them
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
  */
 public class Regex {
 
     private static final Logger logger = LogManager.getLogger(Regex.class.getName());
 
+    /**
+     * Contains Regex templates
+     */
     public enum RegexEnum {
         SURNAME("^[a-zA-Z\\\\s]+"),
         PASSWORD("^(?=\\S+$).{5,}$"),
@@ -25,6 +32,9 @@ public class Regex {
         }
     }
 
+    /**
+     * Contains templates for Logging
+     */
     public enum RegexLoggerMessageEnum {
         SURNAME_MATCHES("surname.matches({}) : {}"),
         PASSWORD_MATCHES("password.matches({}) : {}"),

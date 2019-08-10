@@ -1,5 +1,8 @@
 package ua.training.controller.util;
 
+/**
+ * Contains all the paths possible during the app's work
+ */
 public enum Path {
     CLIENT("/api/client"),
     ADMIN("/api/admin"),

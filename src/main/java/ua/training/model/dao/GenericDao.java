@@ -7,6 +7,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * This interface declares the methods used in direct use of a database
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
 public interface GenericDao<T> extends AutoCloseable {
     void create(T entity) throws SQLException;
 

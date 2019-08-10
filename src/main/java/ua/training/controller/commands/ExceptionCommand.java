@@ -43,11 +43,6 @@ public class ExceptionCommand implements Command {
 
     /**
      * The main method called for ExceptionCommand
-     *
-     * @param request  contains the exception info
-     * @param response basic servlet response
-     * @throws IOException      if forwarding fails
-     * @throws ServletException if forwarding fails
      */
     @Override
     public void execute(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {

@@ -12,9 +12,19 @@ import java.util.*;
 import static ua.training.controller.commands.FoodCommands.FoodFields.NAME;
 import static ua.training.model.dao.impl.JDBCFoodDao.JDBCFoodLoggerMessageEnum.*;
 
+/**
+ * This class processes calls from the Food service, creates SQL requests and updates, and executes them
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
 public class JDBCFoodDao implements FoodDao {
     private Connection connection;
 
+    /**
+     * Contains templates for Logging
+     */
     public enum JDBCFoodLoggerMessageEnum {
         CREATE("Making a JDBC update to create a new food object, statement: {}"),
         FIND_ONE("Making a JDBC request to find a food object by id, statement: {}"),
@@ -31,10 +41,16 @@ public class JDBCFoodDao implements FoodDao {
         }
     }
 
-    public JDBCFoodDao(Connection connection) {
+    JDBCFoodDao(Connection connection) {
         this.connection = connection;
     }
 
+    /**
+     * Creates an insert SQL statement based on the food object and executes it
+     *
+     * @param food contains the food object to be inserted into the database
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public void create(Food food) throws SQLException {
         int id = food.getId();
@@ -59,6 +75,12 @@ public class JDBCFoodDao implements FoodDao {
         connection.close();
     }
 
+    /**
+     * Creates a select SQL statement to get a single Food object and executes it
+     *
+     * @param id id of the food object to return
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public Optional<Food> findById(int id) throws SQLException {
         Optional<Food> food = Optional.empty();
@@ -78,6 +100,12 @@ public class JDBCFoodDao implements FoodDao {
         return food;
     }
 
+
+    /**
+     * Creates a select SQL statement to get all Food objects and executes it
+     *
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public List<Food> findAll() throws SQLException {
         Map<Integer, Food> foods = new HashMap<>();
@@ -100,6 +128,12 @@ public class JDBCFoodDao implements FoodDao {
     }
 
 
+    /**
+     * Creates an update SQL statement based on the food object and executes it
+     *
+     * @param food contains the food object to be updated
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public void update(Food food) throws SQLException {
         int id = food.getId();
@@ -124,6 +158,12 @@ public class JDBCFoodDao implements FoodDao {
         connection.close();
     }
 
+    /**
+     * Creates a delete SQL statement to delete a single Food object and executes it
+     *
+     * @param id id of the food object to delete
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public void delete(int id) throws SQLException {
         PreparedStatement stmt = connection.prepareStatement(
@@ -136,6 +176,9 @@ public class JDBCFoodDao implements FoodDao {
         connection.close();
     }
 
+    /**
+     * Closes the connection to the database
+     */
     @Override
     public void close() {
         try {
@@ -145,6 +188,11 @@ public class JDBCFoodDao implements FoodDao {
         }
     }
 
+    /**
+     * Creates a select SQL statement to get a count of all Food objects and executes it
+     *
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public int getCount() throws SQLException {
         final String query = "" +
@@ -160,6 +208,13 @@ public class JDBCFoodDao implements FoodDao {
     }
 
 
+    /**
+     * Creates a select SQL statement to get all Food objects sorted by a field and executes it
+     *
+     * @param sortBy the name of the parameter in the database to sort by. Possible values: food_id, user_id,
+     *               name, calories, protein, fat, carbohydrates
+     * @throws SQLException if SQL returns an error
+     */
     @Override
     public List<Food> findAllSorted(String sortBy) throws SQLException {
         Map<Integer, Food> foods = new HashMap<>();
@@ -179,8 +234,17 @@ public class JDBCFoodDao implements FoodDao {
         return new ArrayList<>(foods.values());
     }
 
+    /**
+     * Creates a select SQL statement to get a number of Food objects sorted by a field and executes it
+     *
+     * @param sortBy the name of the parameter in the database to sort by. Possible values: food_id, user_id,
+     *               name, calories, protein, fat, carbohydrates
+     * @param number the number of objects to return
+     * @param offset the offset, aka the number of objects to ignore before returning
+     * @throws SQLException if SQL returns an error
+     */
     @Override
-    public List<Food> findNumberSorted(String sortBy, int integer, int offset) throws SQLException {
+    public List<Food> findNumberSorted(String sortBy, int number, int offset) throws SQLException {
         PreparedStatement stmt = null;
         if (sortBy.equals(NAME.field)) {
             stmt = connection.prepareStatement
@@ -190,7 +254,7 @@ public class JDBCFoodDao implements FoodDao {
                     (" select * from food order by " + sortBy + "+0 limit ? offset ?");
         }
 
-        stmt.setInt(1, integer);
+        stmt.setInt(1, number);
         stmt.setInt(2, offset);
 
         logger.debug(FIND_NUMBER_SORTED.message, stmt);

@@ -20,12 +20,18 @@ import static ua.training.controller.commands.FoodCommands.FoodLoggerMessageEnum
 import static ua.training.controller.commands.FoodCommands.FoodRequestAttributeStrings.*;
 import static ua.training.controller.util.Path.*;
 
-public class FoodCommands implements CommandCRUD, Command {
+/**
+ * This class implements the CRUD methods for Food objects, and included several utility methods
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
+public class FoodCommands implements CommandCRUD {
 
     private static final String ADD = "add";
-    private static final String PREVIOUS = "previous";
-    private static final String NEXT = "next";
-    public static final int MAX_MILIGRAMS_PER_100_GRAMS = 100000;
+    private static final String EDIT = "edit";
+    private static final int MAX_MILLIGRAMS_PER_100_GRAMS = 100000;
     private FoodService foodService;
     private static final Logger logger = LogManager.getLogger(FoodCommands.class);
     private final int ROWS_ON_PAGE = 5;
@@ -34,6 +40,9 @@ public class FoodCommands implements CommandCRUD, Command {
         this.foodService = foodService;
     }
 
+    /**
+     * Contains the field names of the food object, as they appear on the web pages
+     */
     public enum FoodFields {
         FOOD_ID("food_id"),
         NAME("name"),
@@ -48,6 +57,9 @@ public class FoodCommands implements CommandCRUD, Command {
         }
     }
 
+    /**
+     * Contains the Strings that will appear in the Logs
+     */
     enum FoodLoggerMessageEnum {
         FOOD_DB_ERROR("Database error when requesting food by id "),
         FOOD_DB_NOT_FOUND_ERROR("Element not found when requesting food by id "),
@@ -61,6 +73,9 @@ public class FoodCommands implements CommandCRUD, Command {
         }
     }
 
+    /**
+     * Contains the various Strings that can be assigned to attributes of a request object in this class's methods
+     */
     enum FoodRequestAttributeStrings {
         NAME_ERROR_MESSAGE("name_error_message"),
         SQL_ERROR_MESSAGE("sql_error_message"),
@@ -72,8 +87,8 @@ public class FoodCommands implements CommandCRUD, Command {
         PAGE("page"),
         NEXT_PAGE("nextPage"),
         LAST_PAGE("lastPage"),
-        NEXT(FoodCommands.NEXT),
-        PREVIOUS(FoodCommands.PREVIOUS),
+        NEXT("next"),
+        PREVIOUS("previous"),
         ERROR_MESSAGE_TEMPLATE("_error_message"),
         INVALID("Invalid value "),
         BELOW_ZERO("Value below zero "),
@@ -101,9 +116,10 @@ public class FoodCommands implements CommandCRUD, Command {
     @Override
     public void edit(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        addOrEdit(request, response, "edit");
+        addOrEdit(request, response, EDIT);
     }
 
+    //adding and editing have very similar flows. They are combined to avoid needless repeating
     private void addOrEdit(HttpServletRequest request, HttpServletResponse response, String operation)
             throws ServletException, IOException {
         String foodIdStr = request.getParameter(FOOD_ID.field);
@@ -120,7 +136,7 @@ public class FoodCommands implements CommandCRUD, Command {
         int fat = Integer.parseInt(fatStr);
         int carbohydrates = Integer.parseInt(carbohydratesStr);
 
-        if(numberFieldsHaveWrongContent(request, response, calories, protein, fat, carbohydrates)) return;
+        if (numberFieldsHaveWrongContent(request, response, calories, protein, fat, carbohydrates)) return;
 
         String name = request.getParameter(NAME.field);
         if (name == null || name.equals("")) {
@@ -187,9 +203,9 @@ public class FoodCommands implements CommandCRUD, Command {
         logger.debug(PAGE_NUMBER_TEMPLATE.message, page);
         int nextPage;
         String nextPageString = request.getParameter(NEXT_PAGE.label);
-        if (PREVIOUS.equals(nextPageString)) {
+        if (PREVIOUS.label.equals(nextPageString)) {
             nextPage = page - 1;
-        } else if (NEXT.equals(nextPageString)) {
+        } else if (NEXT.label.equals(nextPageString)) {
             nextPage = page + 1;
         } else {
             nextPage = page;
@@ -245,6 +261,7 @@ public class FoodCommands implements CommandCRUD, Command {
         redirect(request, response, CLIENT_FOODS.label);
     }
 
+    //runs all the number input fields through regex
     private boolean numberFieldsAreWrongFormat(HttpServletRequest request, HttpServletResponse response,
                                                String caloriesStr, String proteinStr, String fatStr,
                                                String carbohydratesStr) throws ServletException, IOException {
@@ -254,7 +271,7 @@ public class FoodCommands implements CommandCRUD, Command {
                 || numberFormatIsWrong(request, response, CARBOHYDRATES.field, carbohydratesStr);
     }
 
-
+    //checks all the fields for sane content
     private boolean numberFieldsHaveWrongContent(HttpServletRequest request, HttpServletResponse response,
                                                  int calories, int protein, int fat,
                                                  int carbohydrates) throws ServletException, IOException {
@@ -274,7 +291,7 @@ public class FoodCommands implements CommandCRUD, Command {
             getAll(request, response);
             return true;
         }*/
-        if (param > MAX_MILIGRAMS_PER_100_GRAMS) {
+        if (param > MAX_MILLIGRAMS_PER_100_GRAMS) {
             request.setAttribute(paramName + ERROR_MESSAGE_TEMPLATE.label, ABOVE_MAX.label);
             logger.error(ABOVE_MAX.label + paramName);
             getAll(request, response);

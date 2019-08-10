@@ -9,8 +9,10 @@ import java.util.Map;
 import static ua.training.model.dao.mapper.FoodMapper.FoodDatabaseFields.*;
 
 public class FoodMapper implements ObjectMapper<Food> {
-
-   enum FoodDatabaseFields {
+    /**
+     * Contains the field names of the food object, as they appear in the database
+     */
+    enum FoodDatabaseFields {
         FOOD_ID("food_id"),
         NAME("name"),
         CALORIES("calories"),
@@ -37,9 +39,9 @@ public class FoodMapper implements ObjectMapper<Food> {
     }
 
     @Override
-    public Food makeUnique(Map<Integer, Food> cache,
+    public void makeUnique(Map<Integer, Food> cache,
                            Food food) {
         cache.putIfAbsent(food.getId(), food);
-        return cache.get(food.getId());
+        cache.get(food.getId());
     }
 }

@@ -20,13 +20,24 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 
-
+/**
+ * This class handles all the calls by users to possible paths, routing them to appropriate Commands
+ *
+ * @author Roman Kobzar
+ * @version 1.0
+ * @since 2019-09-09
+ */
 public class Servlet extends HttpServlet {
     private static final Logger logger = LogManager.getLogger(Servlet.class);
     private static final String RECEIVED_REQUEST = "Received request on path ";
     private static final String REQUEST_PATH_NOT_FOUND = "Request path not found";
     private Map<String, Command> commands = new HashMap<>();
 
+    /**
+     * Initializes the servlet and assigns all possible paths (that the app will process) to commands
+     *
+     * @throws ServletException if forwarding fails
+     */
     public void init(ServletConfig servletConfig) throws ServletException {
         super.init(servletConfig);
         servletConfig.getServletContext()
@@ -48,6 +59,14 @@ public class Servlet extends HttpServlet {
         commands.put(EXCEPTION.label, new ExceptionCommand());
     }
 
+    /**
+     * Checks received requests for correct path and routes them to appropriate commands
+     *
+     * @param request  contains the request info
+     * @param response basic servlet response
+     * @throws IOException      if forwarding fails
+     * @throws ServletException if forwarding fails
+     */
     public void doGet(HttpServletRequest request,
                       HttpServletResponse response)
             throws IOException, ServletException {
@@ -57,11 +76,10 @@ public class Servlet extends HttpServlet {
         String path = request.getRequestURI();
         logger.debug(RECEIVED_REQUEST + path);
         Command command = null;
-        try{
+        try {
             command = commands.get(path);
             command.execute(request, response);
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             logger.error(REQUEST_PATH_NOT_FOUND);
             request.setAttribute(JAVAX_SERVLET_ERROR_STATUS_CODE, 404);
             command = commands.get(EXCEPTION.label);
